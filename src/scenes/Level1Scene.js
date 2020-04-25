@@ -1,6 +1,7 @@
 import PlayerLaserGroup from "../entities/PlayerLaserGroup";
 import InvaderLaserGroup from "../entities/InvaderLaserGroup";
 import InvaderGroup from "../entities/InvaderGroup";
+import Player from "../entities/Player";
 
 export default class Level1Scene extends Phaser.Scene {
   constructor() {
@@ -22,7 +23,6 @@ export default class Level1Scene extends Phaser.Scene {
 
     //Game Options
     this.movementSpeed;
-    this.canMove;
     this.canInvaderShoot;
     this.colliderActive;
     this.canPlayerShoot=0
@@ -71,10 +71,9 @@ export default class Level1Scene extends Phaser.Scene {
     this.invaderLaserSound = this.sound.add("invaderLaserSound");
 
     //Add player ship, input listeners, collide ship with world bounds
-    this.addShip();
+    this.player=new Player(this,this.cameras.main.width / 2,this.cameras.main.height-50)
+    this.player.addCollider()
     this.addEvents();
-    this.ship.setCollideWorldBounds(true);
-
 
     //Invader shoot events
     var timer1 = this.time.addEvent({
@@ -96,37 +95,9 @@ export default class Level1Scene extends Phaser.Scene {
 
     //InvadersGroup-PlayerLaser colliders
     this.addColliders();
-
-    //Player-InvaderLasers Collider
-    this.physics.add.collider(
-      this.ship,
-      this.invaderLaserGroup,
-      (ship, laser) => {
-        if (this.colliderActive) {
-          this.colliderActive = false;
-          laser.setActive(false);
-          laser.setVisible(false);
-          this.ship.setTint(0xff0000);
-          this.canMove = 0;
-          this.canInvaderShoot = 0;
-          setTimeout(() => {
-            this.actualWaves=this.initialWaves
-            this.invadersLeft = this.initialInvaders;
-            this.scene.start("MainMenu");
-          }, 1500);
-        }
-      }
-    );
-  }
-
-  addShip() {
-    const centerX = this.cameras.main.width / 2;
-    const bottom = this.cameras.main.height;
-    this.ship = this.physics.add.image(centerX, bottom - 50, "ship");
   }
 
   addEvents() {
-
     // Fire Laser on Spacedown or Enterdown
     this.inputKeys = [
       this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE),
@@ -141,9 +112,11 @@ export default class Level1Scene extends Phaser.Scene {
     this.invadersGroup2 = new InvaderGroup(this, 120, 100, window.innerWidth+200, -200);
 
     this.invadersGroup1.setInvaders();
+    //Set initial velocity 
     this.invadersGroup1.setVelocityX(-100);
 
     this.invadersGroup2.setInvaders();
+    //Set initial velocity 
     this.invadersGroup2.setVelocityX(100);
   }
 
@@ -191,18 +164,18 @@ export default class Level1Scene extends Phaser.Scene {
     this.inputKeys.forEach((key) => {
       if (Phaser.Input.Keyboard.JustDown(key)) {
         if(this.canPlayerShoot){
-          this.laserGroup.fireBullet(this.ship.x, this.ship.y - 20);
+          this.laserGroup.fireBullet(this.player.x, this.player.y - 20);
           this.laserSound.play();
         }
       }
     });
 
     //Move Player Ship
-    if (this.canMove && this.cursors.left.isDown)
-      this.ship.setVelocityX(-this.movementSpeed);
-    else if (this.canMove && this.cursors.right.isDown)
-      this.ship.setVelocityX(this.movementSpeed);
-    else this.ship.setVelocityX(0);
+    if (this.player.canMove && this.cursors.left.isDown)
+    this.player.setVelocityX(-this.movementSpeed);
+    else if (this.player.canMove && this.cursors.right.isDown)
+      this.player.setVelocityX(this.movementSpeed);
+    else this.player.setVelocityX(0);
 
     //Move InvadersGroup 1
     if (

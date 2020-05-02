@@ -18,6 +18,7 @@ export default class LevelTest extends Phaser.Scene {
     this.invadersLeft = this.initialInvaders;
     this.initialWaves=2
     this.actualWaves = this.initialWaves; // =n actual waves=n+1 zrobione: 1,2
+    this.visible = true;
 
     //Game Options
     this.movementSpeed;
@@ -35,6 +36,12 @@ export default class LevelTest extends Phaser.Scene {
   preload() {}
 
   create() {
+
+    this.add.text(0,0,"Level Test")
+    .setOrigin(0.5,0.5)
+    .setPosition(window.innerWidth/2,window.innerHeight/2-200)
+    .visible = true;
+
     //Initialize input keys
     this.cursors = this.input.keyboard.createCursorKeys();
     //Set world bounds
@@ -51,7 +58,7 @@ export default class LevelTest extends Phaser.Scene {
       .setScale(2);
 
     //Objects
-    this.laserGroup = new PlayerLaserGroup(this, -300, -300);
+    this.laserGroup = new PlayerLaserGroup(this, -300, -300, this.initialInvaders*2);
     this.createNewWave();
     this.invaderLaserGroup = new InvaderLaserGroup(this,-500,500);
 
@@ -64,6 +71,7 @@ export default class LevelTest extends Phaser.Scene {
     //Sounds
     this.laserSound = this.sound.add("laserSound");
     this.invaderDieSound = this.sound.add("invaderDieSound");
+    this.invaderHitSOund = this.sound.add("invaderHit")
     this.gameOverSound = this.sound.add("gameOverSound");
     this.invaderLaserSound = this.sound.add("invaderLaserSound");
 
@@ -77,7 +85,7 @@ export default class LevelTest extends Phaser.Scene {
     var timer1 = this.time.addEvent({
       delay: 1500, // ms
       callback: () => {
-        this.invadersGroup1.fireInvaderLaser();
+        //this.invadersGroup1.fireInvaderLaser();
       },
       args: [this],
       loop: true,
@@ -124,7 +132,7 @@ export default class LevelTest extends Phaser.Scene {
   }
 
   createNewWave() {
-    this.invadersGroup1 = new InvaderGroupTest(this, 0, 0, -200, -200); //-200 -200
+    this.invadersGroup1 = new InvaderGroupTest(this, 0, 0, 0, 50); // -200 -200
     this.invadersGroup1.setInvaders();
     this.invadersGroup1.setVelocityX(-100);
   }
@@ -146,6 +154,10 @@ export default class LevelTest extends Phaser.Scene {
         }
         else
         {
+          invader.setActive(true)
+          console.log(invader.active)
+          //invader.disableBody(false,false)
+            this.invaderHitSOund.play();
             laser.setX(-100) //SET LASERS X AFTER COLLISION- AVOID DOUBLE HIT
             invader.invaderhealth--;
         }
@@ -175,16 +187,10 @@ export default class LevelTest extends Phaser.Scene {
     else this.ship.setVelocityX(0);
 
     //Move InvadersGroup 1
-    if (
-      this.invadersGroup1.countActive() &&
-      this.invadersGroup1.getFirstAlive().x < 0
-    )
-      this.invadersGroup1.setVelocityX(100);
-    if (
-      this.invadersGroup1.countActive() &&
-      this.invadersGroup1.getLast(true).x > window.innerWidth
-    )
-      this.invadersGroup1.setVelocityX(-100);
+    (this.invadersGroup1.countActive() && this.invadersGroup1.getFirstAlive().x < 0)
+      this.invadersGroup1.setVelocityX(0); //-100
+    if(this.invadersGroup1.countActive() && this.invadersGroup1.getLast(true).x > window.innerWidth)
+      this.invadersGroup1.setVelocityX(0); //-100
 
     //Win Condition
     if (!this.invadersLeft) {

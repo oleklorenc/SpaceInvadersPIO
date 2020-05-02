@@ -25,6 +25,7 @@ export default class InvaderGroupTest extends Phaser.Physics.Arcade.Group {
         invader.setActive(true)
         invader.setVisible(true)
         invader.setScale(0.2)
+        invader.setImmovable(true)
 
         this.scene.tweens.add({
           targets: invader,

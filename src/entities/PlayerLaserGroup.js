@@ -4,11 +4,11 @@ import PlayerLaser from "../entities/PlayerLaser"
 
 
 export default class PlayerLaserGroup extends Phaser.Physics.Arcade.Group {
-    constructor(scene, startX, startY) {
+    constructor(scene, startX, startY, numberOfShots) {
       super(scene.physics.world, scene, { runChildUpdate: true });
   
       this.createMultiple({
-        frameQuantity: 10,
+        frameQuantity: numberOfShots, //10
         key: "laser",
         active: false,
         visible: false,

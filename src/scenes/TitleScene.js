@@ -23,6 +23,7 @@ export default class MainMenuScene extends Phaser.Scene{
         this.addButton(0,200,'Play Game',this.playButton,"Level1")
         this.addButton(0,0,'Options', this.optionsButton, "Options")
         this.addButton(0,-200,'Credits',this.creditsButton, "Credits")
+        this.addButtonPosition(0,200,'Level Test Oskar',this.playButton, "LevelTest", 0, 200)
     }
 
     update(){
@@ -41,5 +42,18 @@ export default class MainMenuScene extends Phaser.Scene{
         .setFontSize(50)
         .setOrigin(0.5,0.5)
         .setPosition(window.innerWidth/2,window.innerHeight/2-y)
+    }
+    addButtonPosition(x,y,text,button,scene, xP, yP){
+        button=
+        this.add.text(x, y, text, { fill: '#0f0' })
+        .setInteractive()
+        .on('pointerdown', () => {this.bgMusic.stop(); //this.bgMusic.destroy();
+             this.scene.start(scene)
+            })
+        .on('pointerover', () => button.setStyle({ fill: '#ff0'}) )
+        .on('pointerout', () => button.setStyle({ fill: '#0f0'}) )
+        .setFontSize(50)
+        .setOrigin(0,0.5)
+        .setPosition(xP,yP)
     }
 }

@@ -165,22 +165,6 @@ export default class Level1Scene extends Phaser.Scene {
         this.invadersLeft--;
       }
     );
-
-    this.physics.add.collider(
-      this.invadersGroup2,
-      this.laserGroup,
-      (invader, laser) => {
-        this.invaderDieSound.play();
-        invader.setActive(false)
-        invader.disableBody(true,true)
-        console.log(invader.active)
-        //invader.destroy();
-        laser.setX(-100) //SET LASERS X AFTER COLLISION- AVOID DOUBLE HIT
-
-        
-        this.invadersLeft--;
-      }
-    );
   }
 
   update(time, delta) {

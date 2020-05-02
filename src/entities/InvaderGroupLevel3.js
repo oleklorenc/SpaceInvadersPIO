@@ -1,8 +1,8 @@
-import InvaderTest from "../entities/InvaderTest"
+import InvaderLevel3 from "../entities/InvaderLevel3"
 
 // SET XY OF THIS GROUP SO THAT IT DOES NOT COLLIDE WITH MOVING OBJECTS
 
-export default class InvaderGroupTest extends Phaser.Physics.Arcade.Group {
+export default class InvaderGroupLevel3 extends Phaser.Physics.Arcade.Group {
     constructor(scene, offsetX, offsetY, startX, startY) {
       super(scene.physics.world, scene);
   
@@ -11,7 +11,7 @@ export default class InvaderGroupTest extends Phaser.Physics.Arcade.Group {
         key: "invader",
         active: false,
         visible: false,
-        classType: InvaderTest,
+        classType: InvaderLevel3,
         setXY: {x: startX, y: startY}
       });
       this.scene=scene

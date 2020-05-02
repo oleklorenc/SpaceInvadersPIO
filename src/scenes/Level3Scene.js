@@ -1,10 +1,11 @@
-import PlayerLaserGroup from "../entities/PlayerLaserGroup";
+import PlayerLaserGroupLevel3 from "../entities/PlayerLaserGroupLevel3";
 import InvaderLaserGroup from "../entities/InvaderLaserGroup";
-import InvaderGroupTest from "../entities/InvaderGroupTest";
+import InvaderGroup from "../entities/InvaderGroup";
+import InvaderGroupLevel3 from "../entities/InvaderGroupLevel3";
 
-export default class LevelTest extends Phaser.Scene {
+export default class Level3Scene extends Phaser.Scene {
   constructor() {
-    super({ key: "LevelTest" });
+    super({ key: "Level3Scene" });
 
     //Objects
     this.ship;
@@ -14,7 +15,7 @@ export default class LevelTest extends Phaser.Scene {
     this.background;
     this.inputKeys;
     this.cursors;
-    this.initialInvaders=8
+    this.initialInvaders=16
     this.invadersLeft = this.initialInvaders;
     this.initialWaves=2
     this.actualWaves = this.initialWaves; // =n actual waves=n+1 zrobione: 1,2
@@ -36,12 +37,6 @@ export default class LevelTest extends Phaser.Scene {
   preload() {}
 
   create() {
-
-    this.add.text(0,0,"Level Test")
-    .setOrigin(0.5,0.5)
-    .setPosition(window.innerWidth/2,window.innerHeight/2-200)
-    .visible = true;
-
     //Initialize input keys
     this.cursors = this.input.keyboard.createCursorKeys();
     //Set world bounds
@@ -58,7 +53,7 @@ export default class LevelTest extends Phaser.Scene {
       .setScale(2);
 
     //Objects
-    this.laserGroup = new PlayerLaserGroup(this, -300, -300, this.initialInvaders*2);
+    this.laserGroup = new PlayerLaserGroupLevel3(this, -300, -300, this.initialInvaders*2);
     this.createNewWave();
     this.invaderLaserGroup = new InvaderLaserGroup(this,-500,500);
 
@@ -85,7 +80,15 @@ export default class LevelTest extends Phaser.Scene {
     var timer1 = this.time.addEvent({
       delay: 1500, // ms
       callback: () => {
-        //this.invadersGroup1.fireInvaderLaser();
+        this.invadersGroup1.fireInvaderLaser();
+      },
+      args: [this],
+      loop: true,
+    });
+    var timer2 = this.time.addEvent({
+      delay: 2000, // ms
+      callback: () => {
+        this.invadersGroup2.fireInvaderLaser();
       },
       args: [this],
       loop: true,
@@ -132,9 +135,14 @@ export default class LevelTest extends Phaser.Scene {
   }
 
   createNewWave() {
-    this.invadersGroup1 = new InvaderGroupTest(this, 0, 0, 0, 50); // -200 -200
+    this.invadersGroup1 = new InvaderGroupLevel3(this, 0, 0, -200, -200);
+    this.invadersGroup2 = new InvaderGroup(this, 120, 100, window.innerWidth+200, -200);
+
     this.invadersGroup1.setInvaders();
     this.invadersGroup1.setVelocityX(-100);
+
+    this.invadersGroup2.setInvaders();
+    this.invadersGroup2.setVelocityX(100);
   }
 
   addColliders() {
@@ -156,11 +164,22 @@ export default class LevelTest extends Phaser.Scene {
         {
           invader.setActive(true)
           console.log(invader.active)
-          //invader.disableBody(false,false)
-            this.invaderHitSOund.play();
-            laser.setX(-100) //SET LASERS X AFTER COLLISION- AVOID DOUBLE HIT
-            invader.invaderhealth--;
+          this.invaderHitSOund.play();
+          laser.setX(-100) //SET LASERS X AFTER COLLISION- AVOID DOUBLE HIT
+          invader.invaderhealth--;
         }
+      }
+    );
+    this.physics.add.collider(
+      this.invadersGroup2,
+      this.laserGroup,
+      (invader, laser) => {
+        this.invaderDieSound.play();
+        invader.setActive(false)
+        invader.disableBody(true,true)
+        console.log(invader.active)
+        laser.setX(-100) //SET LASERS X AFTER COLLISION- AVOID DOUBLE HIT
+        this.invadersLeft--;
       }
     );
   }
@@ -187,10 +206,17 @@ export default class LevelTest extends Phaser.Scene {
     else this.ship.setVelocityX(0);
 
     //Move InvadersGroup 1
-    (this.invadersGroup1.countActive() && this.invadersGroup1.getFirstAlive().x < 0)
-      this.invadersGroup1.setVelocityX(0); //-100
+    if(this.invadersGroup1.countActive() && this.invadersGroup1.getFirstAlive().x < 0)
+      this.invadersGroup1.setVelocityX(100);
     if(this.invadersGroup1.countActive() && this.invadersGroup1.getLast(true).x > window.innerWidth)
-      this.invadersGroup1.setVelocityX(0); //-100
+      this.invadersGroup1.setVelocityX(-100);
+
+    //Move InvadersGroup 2
+    if(this.invadersGroup2.countActive() &&this.invadersGroup2.getFirstAlive().x < 0)
+      this.invadersGroup2.setVelocityX(100);
+    if(this.invadersGroup2.countActive() && this.invadersGroup2.getLast(true).x > window.innerWidth)
+      this.invadersGroup2.setVelocityX(-100);
+
 
     //Win Condition
     if (!this.invadersLeft) {

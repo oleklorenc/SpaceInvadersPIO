@@ -1,4 +1,4 @@
-import Invader from "../entities/Invader"
+import Invader2 from "../entities/InvaderLvl2"
 
 
 // SET XY OF THIS GROUP SO THAT IT DOES NOT COLLIDE WITH MOVING OBJECTS
@@ -13,7 +13,7 @@ export default class InvaderGroup extends Phaser.Physics.Arcade.Group {
         key: "invader",
         active: false,
         visible: false,
-        classType: Invader,
+        classType: Invader2,
         setXY: {x: startX, y: startY}
       });
       this.scene=scene
@@ -26,7 +26,7 @@ export default class InvaderGroup extends Phaser.Physics.Arcade.Group {
         let invader = this.getFirstDead(false);
         invader.setActive(true)
         invader.setVisible(true)
-        invader.setScale(0.2)
+        invader.setScale(0.033)
 
         this.scene.tweens.add({
           targets: invader,
@@ -54,7 +54,7 @@ export default class InvaderGroup extends Phaser.Physics.Arcade.Group {
         var index=Phaser.Math.Between(0,this.getChildren().length-1)
         if(this.getChildren()[index].active){
         //setTimeout(()=>{
-          this.scene.invaderLaserGroup.fireBullet(this.getChildren()[index].x,this.getChildren()[index].y+15)
+          this.scene.invaderLaserGroup2.fireBullet(this.getChildren()[index].x,this.getChildren()[index].y+15)
           this.scene.invaderLaserSound.play()
           console.log(this.getChildren()[index].y)
         }

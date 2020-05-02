@@ -1,3 +1,5 @@
+//import Level1Scene from "../scenes/Level1Scene";
+
 export default class Invader extends Phaser.Physics.Arcade.Sprite {
   constructor(scene, x, y) {
     super(scene, x, y, "invader"); //w tym konstruktorze dajemy nazwe do obrazka

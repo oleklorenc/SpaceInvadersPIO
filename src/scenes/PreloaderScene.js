@@ -65,9 +65,13 @@ export default class PreloaderScene extends Phaser.Scene {
     this.load.image("laser", "src/assets/playerLaser.png");
     this.load.image("invaderLaser", "src/assets/invaderLaser.png");
     this.load.image("invader", "src/assets/alien.png");
+    this.load.image("invader2", "src/assets/redAlien.png");
+    this.load.image("invaderLevel3", "src/assets/alienLevel3Scaled.png");
+
     this.load.image("ship", "src/assets/ship.png");
     //Sounds
     this.load.audio("laserSound", ["src/assets/laser_sound.mp3"]);
+    this.load.audio("invaderHit", ["src/assets/invaderHit.mp3"]);
     this.load.audio("invaderDieSound", ["src/assets/invader_die_sound.mp3"]);
     this.load.audio("gameOverSound", ["src/assets/gameOverSound.mp3"]);
     this.load.audio("invaderLaserSound", ["src/assets/invaderLaserSound.mp3"]);

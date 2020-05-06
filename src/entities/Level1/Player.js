@@ -22,6 +22,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
           this.canMove = 0;
           this.scene.canInvaderShoot = 0;
           this.scene.canPlayerShoot=0
+          this.scene.gameOverSound.play()
           setTimeout(() => {
             this.scene.actualWaves = this.scene.initialWaves;
             this.scene.invadersLeft = this.scene.initialInvaders;

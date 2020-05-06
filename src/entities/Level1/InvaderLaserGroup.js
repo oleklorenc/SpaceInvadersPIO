@@ -1,4 +1,4 @@
-import InvaderLaser from "../entities/InvaderLaser"
+import InvaderLaser from "./InvaderLaser"
 
 // SET XY OF THIS GROUP SO THAT IT DOES NOT COLLIDE WITH MOVING OBJECTS
 

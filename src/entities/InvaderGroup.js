@@ -55,7 +55,7 @@ export default class InvaderGroup extends Phaser.Physics.Arcade.Group {
         //setTimeout(()=>{
           this.scene.invaderLaserGroup.fireBullet(this.getChildren()[index].x,this.getChildren()[index].y+15)
           this.scene.invaderLaserSound.play()
-          console.log(this.getChildren()[index].y)
+          console.log(this.getChildren()[index].y);
         }
         //},500)
       }

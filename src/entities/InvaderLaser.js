@@ -14,9 +14,9 @@ export default class InvaderLaser extends Phaser.Physics.Arcade.Sprite {
 
   fire(x, y) {
     this.body.reset(x, y);
-
     this.setActive(true);
     this.setVisible(true);
     this.setVelocityY(700);
+    //this.setAngularVelocity(111);
   }
 }

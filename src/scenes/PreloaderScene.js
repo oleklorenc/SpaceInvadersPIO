@@ -66,13 +66,17 @@ export default class PreloaderScene extends Phaser.Scene {
     this.load.image("invaderLaser", "src/assets/invaderLaser.png");
     this.load.image("invader", "src/assets/alien.png");
     this.load.image("ship", "src/assets/ship.png");
+    this.load.image("invader4", "src/assets/strangeAlien.png");
     //Sounds
     this.load.audio("laserSound", ["src/assets/laser_sound.mp3"]);
     this.load.audio("invaderDieSound", ["src/assets/invader_die_sound.mp3"]);
     this.load.audio("gameOverSound", ["src/assets/gameOverSound.mp3"]);
     this.load.audio("invaderLaserSound", ["src/assets/invaderLaserSound.mp3"]);
     this.load.audio("mainMusic", ["src/assets/spaceInvadersTheme.mp3"]);
-
+    this.load.audio("battle", ["src/assets/battle.mp3"]);
+    this.load.audio("lost", ["src/assets/lost.mp3"]);
+    this.load.audio("nextStage", ['src/assets/nextStage.mp3']); 
+    this.load.audio("stage4", ['src/assets/stage4.mp3']); 
     // remove progress bar when complete
     this.load.on(
       "complete",

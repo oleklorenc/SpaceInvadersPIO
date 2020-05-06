@@ -31,6 +31,9 @@ export default class Level1Scene extends Phaser.Scene {
     this.invaderLaserSound;
     this.invaderDieSound;
     this.laserSound;
+    this.nextStage;
+    this.lostSound;
+    this.bgMusic;
   }
 
   preload() {}
@@ -69,7 +72,10 @@ export default class Level1Scene extends Phaser.Scene {
     this.invaderDieSound = this.sound.add("invaderDieSound");
     this.gameOverSound = this.sound.add("gameOverSound");
     this.invaderLaserSound = this.sound.add("invaderLaserSound");
-
+    this.lostSound = this.sound.add("lost");
+    this.nextStage = this.sound.add("nextStage");
+    this.bgMusic = this.sound.add("battle");
+    this.bgMusic.play();
     //Add player ship, input listeners, collide ship with world bounds
     this.addShip();
     this.addEvents();
@@ -109,11 +115,16 @@ export default class Level1Scene extends Phaser.Scene {
           this.ship.setTint(0xff0000);
           this.canMove = 0;
           this.canInvaderShoot = 0;
+          this.canPlayerShoot = 0;
+          this.bgMusic.stop();
+          this.lostSound.play();
           setTimeout(() => {
             this.actualWaves=this.initialWaves
             this.invadersLeft = this.initialInvaders;
+            console.log(this.actualWaves);
+            console.log(this.invadersLeft);
             this.scene.start("MainMenu");
-          }, 1500);
+          }, 3500);
         }
       }
     );
@@ -141,10 +152,10 @@ export default class Level1Scene extends Phaser.Scene {
     this.invadersGroup2 = new InvaderGroup(this, 120, 100, window.innerWidth+200, -200);
 
     this.invadersGroup1.setInvaders();
-    this.invadersGroup1.setVelocityX(-100);
+    //this.invadersGroup1.setVelocityX(-100);
 
     this.invadersGroup2.setInvaders();
-    this.invadersGroup2.setVelocityX(100);
+   // this.invadersGroup2.setVelocityX(100);
   }
 
   addColliders() {
@@ -209,42 +220,53 @@ export default class Level1Scene extends Phaser.Scene {
       this.invadersGroup1.countActive() &&
       this.invadersGroup1.getFirstAlive().x < 0
     )
-      this.invadersGroup1.setVelocityX(100);
+      this.invadersGroup1.setVelocityX(200);
     if (
       this.invadersGroup1.countActive() &&
       this.invadersGroup1.getLast(true).x > window.innerWidth
     )
-      this.invadersGroup1.setVelocityX(-100);
+      this.invadersGroup1.setVelocityX(-200);
 
     //Move InvadersGroup 2
     if (
       this.invadersGroup2.countActive() &&
       this.invadersGroup2.getFirstAlive().x < 0
     )
-      this.invadersGroup2.setVelocityX(100);
+      this.invadersGroup2.setVelocityX(200);
     if (
       this.invadersGroup2.countActive() &&
       this.invadersGroup2.getLast(true).x > window.innerWidth
     )
-      this.invadersGroup2.setVelocityX(-100);
+      this.invadersGroup2.setVelocityX(-200);
 
     //Win Condition
     if (!this.invadersLeft) {
-      this.invadersLeft = this.initialInvaders;
-      this.canPlayerShoot=0
-      this.laserGroup.getChildren().forEach(child=>{
-        child.setActive(false)
-        child.setVisible(false)
-        child.body.reset(window.innerWidth+400,-300)
-      })
+      // this.invadersLeft = this.initialInvaders;
+      // this.canPlayerShoot=0
+      // this.laserGroup.getChildren().forEach(child=>{
+      //   child.setActive(false)
+      //   child.setVisible(false)
+      //   child.body.reset(window.innerWidth+400,-300)
+      this.bgMusic.stop();
+      this.nextStage.play();
+      this.invadersLeft = 16;
+      this.scene.start("Level4");
+      
+
       if (this.actualWaves > 0) {
         this.actualWaves--;
         this.createNewWave();
-        this.addColliders()
+        this.addColliders();
       } else {
         this.actualWaves=this.initialWaves
+        //this.bgMusic.stop();
         this.scene.start("MainMenu");
+        this.bgMusic.stop();
       }
+
+     
+     // })
+
     }
   }
 }

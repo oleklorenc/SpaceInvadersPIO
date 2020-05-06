@@ -4,5 +4,6 @@ export default class Invader extends Phaser.Physics.Arcade.Sprite {
     this.shootInterval = Phaser.Math.Between(5000, 8000);
     this.scene = scene;
     this.shootTime = Phaser.Math.Between(4000, 8000);
+
   }
 }

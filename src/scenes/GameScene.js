@@ -27,15 +27,16 @@ export default class GameScene extends Phaser.Scene {
     this.invaderLaserSound;
     this.invaderDieSound;
     this.laserSound;
+    this.bgMusic;
   }
 
   preload() {
-    
+
   }
 
   create() {
+
     this.cursors = this.input.keyboard.createCursorKeys();
-    
     this.physics.world.setBounds(0, 0, window.innerWidth, window.innerHeight);
     //Scrolling Background
     this.background = this.add
@@ -65,7 +66,7 @@ export default class GameScene extends Phaser.Scene {
     this.gameOverSound = this.sound.add("gameOverSound");
     this.invaderLaserSound = this.sound.add("invaderLaserSound");
 
-    
+
     this.invadersGroup.setInvaders();
     this.invadersGroup.setVelocityX(-100);
 

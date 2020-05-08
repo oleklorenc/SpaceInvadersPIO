@@ -34,6 +34,8 @@ export default class Level2Scene extends Phaser.Scene {
     this.invaderLaserSound;
     this.invaderDieSound;
     this.laserSound;
+    this.gameOverSound
+    this.nextStageSound
   }
 
   preload() {}
@@ -72,6 +74,7 @@ export default class Level2Scene extends Phaser.Scene {
     this.invaderDieSound = this.sound.add("invaderDieSound");
     this.gameOverSound = this.sound.add("gameOverSound");
     this.invaderLaserSound = this.sound.add("invaderLaserSound");
+    this.nextStageSound=this.sound.add("nextStageSound")
 
     this.player=new Player(this,this.cameras.main.width / 2,this.cameras.main.height-50)
     this.player.addCollider()
@@ -211,8 +214,11 @@ export default class Level2Scene extends Phaser.Scene {
         this.createNewWave();
         this.addColliders()
       } else {
-        this.actualWaves=this.initialWaves
-        this.scene.start("Level3");
+        this.nextStageSound.play()
+        setTimeout(()=>{
+          this.actualWaves=this.initialWaves
+          this.scene.start("Level3");
+        },3000)
       }
     }
   }

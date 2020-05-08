@@ -16,8 +16,6 @@ export default class MainMenuScene extends Phaser.Scene{
 
     create(){
         this.model=this.sys.game.globals.model
-        this.bgMusic=this.sound.add('mainMusic', {volume: 0.25, loop: true})
-        this.bgMusic.play()
         
         this.add.image(0,0,'background').setScale(2.5)
         this.addButton(0,200,'Play Game',this.playButton,"Level1")
@@ -33,7 +31,7 @@ export default class MainMenuScene extends Phaser.Scene{
         button=
         this.add.text(x, y, text, { fill: '#0f0' })
         .setInteractive()
-        .on('pointerdown', () => {this.bgMusic.stop(); //this.bgMusic.destroy();
+        .on('pointerdown', () => {
              this.scene.start(scene)
             })
         .on('pointerover', () => button.setStyle({ fill: '#ff0'}) )

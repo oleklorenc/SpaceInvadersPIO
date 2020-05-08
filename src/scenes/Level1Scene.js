@@ -31,6 +31,8 @@ export default class Level1Scene extends Phaser.Scene {
     this.invaderLaserSound;
     this.invaderDieSound;
     this.laserSound;
+    this.gameOverSound
+    this.nextStageSound
   }
 
   preload() {}
@@ -69,6 +71,7 @@ export default class Level1Scene extends Phaser.Scene {
     this.invaderDieSound = this.sound.add("invaderDieSound");
     this.gameOverSound = this.sound.add("gameOverSound");
     this.invaderLaserSound = this.sound.add("invaderLaserSound");
+    this.nextStageSound=this.sound.add("nextStageSound")
 
     //Add player ship, input listeners, collide ship with world bounds
     this.player=new Player(this,this.cameras.main.width / 2,this.cameras.main.height-50)
@@ -106,8 +109,6 @@ export default class Level1Scene extends Phaser.Scene {
   }
 
   createNewWave() {
-    //this.invadersGroup1.destroy(true)
-    //this.invadersGroup2.destroy(true)
     this.invadersGroup1 = new InvaderGroup(this, 0, 0, -200, -200);
     this.invadersGroup2 = new InvaderGroup(this, 120, 100, window.innerWidth+200, -200);
 
@@ -215,8 +216,11 @@ export default class Level1Scene extends Phaser.Scene {
         this.createNewWave();
         this.addColliders()
       } else {
-        this.actualWaves=this.initialWaves
-        this.scene.start("Level2");
+        this.nextStageSound.play()
+        setTimeout(()=>{
+          this.actualWaves=this.initialWaves
+          this.scene.start("Level2");
+        },3000)
       }
     }
   }

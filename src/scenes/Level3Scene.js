@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import PlayerLaserGroupLevel3 from "../entities/PlayerLaserGroupLevel3";
 import InvaderLaserGroup from "../entities/InvaderLaserGroup";
 import InvaderGroup from "../entities/InvaderGroup";
@@ -9,6 +10,20 @@ export default class Level3Scene extends Phaser.Scene {
 
     //Objects
     this.ship;
+=======
+import PlayerLaserGroupLevel3 from "../entities/Level3/PlayerLaserGroupLevel3";
+import InvaderLaserGroup from "../entities/Level1/InvaderLaserGroup";
+import InvaderGroup from "../entities/Level1/InvaderGroup";
+import InvaderGroupLevel3 from "../entities/Level3/InvaderGroupLevel3";
+import Player from "../entities/Level3/Player";
+
+export default class Level3Scene extends Phaser.Scene {
+  constructor() {
+    super({ key: "Level3" });
+
+    //Objects
+    this.player;
+>>>>>>> master
     this.laserGroup;
     this.invaderLaserGroup;
     this.invadersGroup1;
@@ -23,7 +38,10 @@ export default class Level3Scene extends Phaser.Scene {
 
     //Game Options
     this.movementSpeed;
+<<<<<<< HEAD
     this.canMove;
+=======
+>>>>>>> master
     this.canInvaderShoot;
     this.colliderActive;
     this.canPlayerShoot=0
@@ -59,7 +77,10 @@ export default class Level3Scene extends Phaser.Scene {
 
     //Game Options
     this.movementSpeed = 500;
+<<<<<<< HEAD
     this.canMove = 1;
+=======
+>>>>>>> master
     this.canInvaderShoot = 1;
     this.colliderActive = true;
 
@@ -71,9 +92,17 @@ export default class Level3Scene extends Phaser.Scene {
     this.invaderLaserSound = this.sound.add("invaderLaserSound");
 
     //Add player ship, input listeners, collide ship with world bounds
+<<<<<<< HEAD
     this.addShip();
     this.addEvents();
     this.ship.setCollideWorldBounds(true);
+=======
+    this.player=new Player(this,this.cameras.main.width / 2,this.cameras.main.height-50)
+    this.player.addCollider()
+    //this.addShip();
+    this.addEvents();
+    //this.ship.setCollideWorldBounds(true);
+>>>>>>> master
 
 
     //Invader shoot events
@@ -96,6 +125,7 @@ export default class Level3Scene extends Phaser.Scene {
 
     //InvadersGroup-PlayerLaser colliders
     this.addColliders();
+<<<<<<< HEAD
 
     //Player-InvaderLasers Collider
     this.physics.add.collider(
@@ -125,6 +155,9 @@ export default class Level3Scene extends Phaser.Scene {
     this.ship = this.physics.add.image(centerX, bottom - 50, "ship");
   }
 
+=======
+  }
+>>>>>>> master
   addEvents() {
 
     // Fire Laser on Spacedown or Enterdown
@@ -192,18 +225,30 @@ export default class Level3Scene extends Phaser.Scene {
     this.inputKeys.forEach((key) => {
       if (Phaser.Input.Keyboard.JustDown(key)) {
         if(this.canPlayerShoot){
+<<<<<<< HEAD
           this.laserGroup.fireBullet(this.ship.x, this.ship.y - 20);
+=======
+          this.laserGroup.fireBullet(this.player.x, this.player.y - 20);
+>>>>>>> master
           this.laserSound.play();
         }
       }
     });
 
     //Move Player Ship
+<<<<<<< HEAD
     if (this.canMove && this.cursors.left.isDown)
       this.ship.setVelocityX(-this.movementSpeed);
     else if (this.canMove && this.cursors.right.isDown)
       this.ship.setVelocityX(this.movementSpeed);
     else this.ship.setVelocityX(0);
+=======
+    if (this.player.canMove && this.cursors.left.isDown)
+      this.player.setVelocityX(-this.movementSpeed);
+    else if (this.player.canMove && this.cursors.right.isDown)
+      this.player.setVelocityX(this.movementSpeed);
+    else this.player.setVelocityX(0);
+>>>>>>> master
 
     //Move InvadersGroup 1
     if(this.invadersGroup1.countActive() && this.invadersGroup1.getFirstAlive().x < 0)

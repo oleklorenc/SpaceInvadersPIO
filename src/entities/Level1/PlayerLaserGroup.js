@@ -1,4 +1,4 @@
-import PlayerLaser from "../entities/PlayerLaser"
+import PlayerLaser from "./PlayerLaser"
 
 // SET XY OF THIS GROUP SO THAT IT DOES NOT COLLIDE WITH MOVING OBJECTS
 

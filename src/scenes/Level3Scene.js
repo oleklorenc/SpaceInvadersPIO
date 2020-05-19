@@ -22,6 +22,8 @@ export default class Level3Scene extends Phaser.Scene {
     this.actualWaves = this.initialWaves; // =n actual waves=n+1 zrobione: 1,2
     this.visible = true;
     this.invadersGroup1VelocityX = -100
+    this.levelText; //Display the current level
+    this.levelTextPosition; //Used for changing x-position of levelText
 
     //Game Options
     this.movementSpeed;
@@ -54,7 +56,8 @@ export default class Level3Scene extends Phaser.Scene {
         "scrollBackground"
       )
       .setScale(2);
-
+    this.levelTextPosition = -260;
+    this.levelText = this.add.text(this.levelTextPosition, this.cameras.main.centerY, 'Level 3', { fontSize: '128px', align: 'center', color: '#00ff00' }).setOrigin(0.5);
     //Objects
     this.laserGroup = new PlayerLaserGroupLevel3(this, -300, -300, this.initialInvaders*2);
     this.createNewWave();
@@ -99,6 +102,7 @@ export default class Level3Scene extends Phaser.Scene {
     //InvadersGroup-PlayerLaser colliders
     this.addColliders();
   }
+  
   addEvents() {
 
     // Fire Laser on Spacedown or Enterdown
@@ -136,12 +140,12 @@ export default class Level3Scene extends Phaser.Scene {
         }
         else
         {
-            invader.setVelocityX(500); //Start wobble
+            invader.setVelocityX(500 + this.invadersGroup1VelocityX); //Start wobble
             setTimeout(() => {
-                invader.setVelocityX(-500);
+                invader.setVelocityX(-500 + this.invadersGroup1VelocityX);
             }, 10);
             setTimeout(() => {
-              invader.setVelocityX(500);
+              invader.setVelocityX(500 + this.invadersGroup1VelocityX);
             }, 30);
             setTimeout(() => {
               invader.setVelocityX(this.invadersGroup1VelocityX); //End wobble
@@ -170,6 +174,16 @@ export default class Level3Scene extends Phaser.Scene {
   }
 
   update(time, delta) {
+
+    if(this.levelTextPosition != this.cameras.main.centerX) //Update levelText
+      this.levelText.setX(this.levelTextPosition += 10);
+    else
+    {
+      setTimeout(() => {
+        this.levelText.setX(this.levelTextPosition += 10);
+      }, 500);
+    }
+
     //Scroll Background
     this.background.tilePositionY -= 1.5;
 
@@ -193,12 +207,12 @@ export default class Level3Scene extends Phaser.Scene {
     //Move InvadersGroup 1
     if(this.invadersGroup1.countActive() && this.invadersGroup1.getFirstAlive().x < 0)
     {
-      this.invadersGroup1VelocityX = 100;
+      this.invadersGroup1VelocityX = 100; //Needed for wobble
       this.invadersGroup1.setVelocityX(100);
     }
     if(this.invadersGroup1.countActive() && this.invadersGroup1.getLast(true).x > window.innerWidth)
     {
-      this.invadersGroup1VelocityX = -100;
+      this.invadersGroup1VelocityX = -100; //Needed for wobble
       this.invadersGroup1.setVelocityX(-100);
     }
 

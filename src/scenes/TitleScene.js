@@ -16,7 +16,6 @@ export default class MainMenuScene extends Phaser.Scene{
 
     create(){
         this.model=this.sys.game.globals.model
-        
         this.add.image(0,0,'background').setScale(2.5)
         this.addButton(0,200,'Play Game',this.playButton,"Level1")
         this.addButton(0,0,'Options', this.optionsButton, "Options")

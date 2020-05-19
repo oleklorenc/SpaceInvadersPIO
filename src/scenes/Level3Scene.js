@@ -21,6 +21,7 @@ export default class Level3Scene extends Phaser.Scene {
     this.initialWaves=2
     this.actualWaves = this.initialWaves; // =n actual waves=n+1 zrobione: 1,2
     this.visible = true;
+    this.invadersGroup1VelocityX = -100
 
     //Game Options
     this.movementSpeed;
@@ -135,11 +136,22 @@ export default class Level3Scene extends Phaser.Scene {
         }
         else
         {
-          invader.setActive(true)
-          console.log(invader.active)
-          this.invaderHitSOund.play();
-          laser.setX(-100) //SET LASERS X AFTER COLLISION- AVOID DOUBLE HIT
-          invader.invaderhealth--;
+            invader.setVelocityX(500); //Start wobble
+            setTimeout(() => {
+                invader.setVelocityX(-500);
+            }, 10);
+            setTimeout(() => {
+              invader.setVelocityX(500);
+            }, 30);
+            setTimeout(() => {
+              invader.setVelocityX(this.invadersGroup1VelocityX); //End wobble
+            }, 40);
+            invader.setTint(0xbf1f1f);
+            invader.setActive(true)
+            console.log(invader.active)
+            this.invaderHitSOund.play();
+            laser.setX(-100) //SET LASERS X AFTER COLLISION- AVOID DOUBLE HIT
+            invader.invaderhealth--;
         }
       }
     );
@@ -180,9 +192,15 @@ export default class Level3Scene extends Phaser.Scene {
 
     //Move InvadersGroup 1
     if(this.invadersGroup1.countActive() && this.invadersGroup1.getFirstAlive().x < 0)
+    {
+      this.invadersGroup1VelocityX = 100;
       this.invadersGroup1.setVelocityX(100);
+    }
     if(this.invadersGroup1.countActive() && this.invadersGroup1.getLast(true).x > window.innerWidth)
+    {
+      this.invadersGroup1VelocityX = -100;
       this.invadersGroup1.setVelocityX(-100);
+    }
 
     //Move InvadersGroup 2
     if(this.invadersGroup2.countActive() &&this.invadersGroup2.getFirstAlive().x < 0)

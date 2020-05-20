@@ -25,7 +25,7 @@ export default class ChooseLevelScene extends Phaser.Scene{
         this.load.image('invader3', 'src/assets/sprites/PinkAlien.png')
         this.load.image('invader4', 'src/assets/sprites/YellowAlien.png')
         this.load.image('invader5', 'src/assets/sprites/BlueAlien.png')
-        this.load.image('invader6', 'src/assets/sprites/PurpleAlien.png')
+        this.load.image('invader6', 'src/assets/sprites/GreenAlien.png')
         this.load.image('invader7', 'src/assets/orangeAlien.png')
     }
 

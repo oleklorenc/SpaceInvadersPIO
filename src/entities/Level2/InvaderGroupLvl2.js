@@ -1,4 +1,4 @@
-import Invader2 from "../entities/InvaderLvl2"
+import Invader2 from "./InvaderLvl2"
 
 
 // SET XY OF THIS GROUP SO THAT IT DOES NOT COLLIDE WITH MOVING OBJECTS
@@ -26,7 +26,7 @@ export default class InvaderGroup extends Phaser.Physics.Arcade.Group {
         let invader = this.getFirstDead(false);
         invader.setActive(true)
         invader.setVisible(true)
-        invader.setScale(0.2)
+        invader.setScale(0.033)
 
         this.scene.tweens.add({
           targets: invader,

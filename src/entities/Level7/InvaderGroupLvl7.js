@@ -1,19 +1,15 @@
-import Invader2 from "../entities/InvaderLvl2"
+import Invader7 from "./InvaderLvl7";
 
-
-// SET XY OF THIS GROUP SO THAT IT DOES NOT COLLIDE WITH MOVING OBJECTS
-
-
-export default class InvaderGroup extends Phaser.Physics.Arcade.Group {
+export default class InvaderGroup7 extends Phaser.Physics.Arcade.Group {
     constructor(scene, offsetX, offsetY, startX, startY) {
       super(scene.physics.world, scene);
   
       this.createMultiple({
-        frameQuantity: 8,
+        frameQuantity: 5,
         key: "invader",
         active: false,
         visible: false,
-        classType: Invader2,
+        classType: Invader7,
         setXY: {x: startX, y: startY}
       });
       this.scene=scene
@@ -22,18 +18,17 @@ export default class InvaderGroup extends Phaser.Physics.Arcade.Group {
     }
   
     setInvaders() {
-      for (let i = 0; i < 8; i++) {
+      for (let i = 0; i < 5; i++) {
         let invader = this.getFirstDead(false);
         invader.setActive(true)
         invader.setVisible(true)
-        invader.setScale(0.2)
-
+        invader.setScale(0.08) //?
         this.scene.tweens.add({
           targets: invader,
           x: this.offsetX+200+200*i,
           y: 100+this.offsetY,
-          duration: 3000,
-          ease: 'Power2',
+          duration: 1000,
+          ease: 'Power1',
           onComplete: ()=>{this.scene.canPlayerShoot=true},
           //completeDelay: 3000
       });
@@ -54,9 +49,9 @@ export default class InvaderGroup extends Phaser.Physics.Arcade.Group {
         var index=Phaser.Math.Between(0,this.getChildren().length-1)
         if(this.getChildren()[index].active){
         //setTimeout(()=>{
-          this.scene.invaderLaserGroup2.fireBullet(this.getChildren()[index].x,this.getChildren()[index].y+15)
+          this.scene.invaderLaserGroup7.fireBullet(this.getChildren()[index].x,this.getChildren()[index].y+15)
           this.scene.invaderLaserSound.play()
-          console.log(this.getChildren()[index].y)
+          console.log(this.getChildren()[index].y);
         }
         //},500)
       }

@@ -1,10 +1,8 @@
-import Invader2 from "../entities/InvaderLvl2"
-
+import InvaderLevel3 from "./InvaderLevel3"
 
 // SET XY OF THIS GROUP SO THAT IT DOES NOT COLLIDE WITH MOVING OBJECTS
 
-
-export default class InvaderGroup extends Phaser.Physics.Arcade.Group {
+export default class InvaderGroupLevel3 extends Phaser.Physics.Arcade.Group {
     constructor(scene, offsetX, offsetY, startX, startY) {
       super(scene.physics.world, scene);
   
@@ -13,7 +11,7 @@ export default class InvaderGroup extends Phaser.Physics.Arcade.Group {
         key: "invader",
         active: false,
         visible: false,
-        classType: Invader2,
+        classType: InvaderLevel3,
         setXY: {x: startX, y: startY}
       });
       this.scene=scene
@@ -27,6 +25,7 @@ export default class InvaderGroup extends Phaser.Physics.Arcade.Group {
         invader.setActive(true)
         invader.setVisible(true)
         invader.setScale(0.2)
+        invader.setImmovable(true)
 
         this.scene.tweens.add({
           targets: invader,
@@ -35,30 +34,19 @@ export default class InvaderGroup extends Phaser.Physics.Arcade.Group {
           duration: 3000,
           ease: 'Power2',
           onComplete: ()=>{this.scene.canPlayerShoot=true},
-          //completeDelay: 3000
-      });
-
-        /*
-        invader.x=this.offsetX+200+200*i
-        invader.y=100+this.offsetY
-        invader.setActive(true)
-        invader.setVisible(true)
-        invader.setScale(0.2)
-        */
+        });
       }
     }
   
     fireInvaderLaser(){
-      var maxShooter=Phaser.Math.Between(0,3)
+      var maxShooter=Phaser.Math.Between(0,15)
       for(let i=0;i<maxShooter;i++){
         var index=Phaser.Math.Between(0,this.getChildren().length-1)
         if(this.getChildren()[index].active){
-        //setTimeout(()=>{
-          this.scene.invaderLaserGroup2.fireBullet(this.getChildren()[index].x,this.getChildren()[index].y+15)
+          this.scene.invaderLaserGroup.fireBullet(this.getChildren()[index].x,this.getChildren()[index].y+15)
           this.scene.invaderLaserSound.play()
           console.log(this.getChildren()[index].y)
         }
-        //},500)
       }
     }
   }

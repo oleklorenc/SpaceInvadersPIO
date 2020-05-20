@@ -1,15 +1,16 @@
-import PlayerLaserGroup from "../entities/PlayerLaserGroup";
-import InvaderLaserGroup2 from "../entities/InvaderLaserGroupLvl2";
-import InvaderGroup2 from "../entities/InvaderGroupLvl2";
-import InvaderLaserGroup from "../entities/InvaderLaserGroup";
-import InvaderGroup from "../entities/InvaderGroup";
+import PlayerLaserGroup from "../entities/Level2/PlayerLaserGroup";
+import InvaderLaserGroup2 from "../entities/Level2/InvaderLaserGroupLvl2";
+import InvaderGroup2 from "../entities/Level2/InvaderGroupLvl2";
+import InvaderLaserGroup from "../entities/Level1/InvaderLaserGroup";
+import InvaderGroup from "../entities/Level1/InvaderGroup";
+import Player from "../entities/Level2/Player";
 
 export default class Level2Scene extends Phaser.Scene {
   constructor() {
     super({ key: "Level2" });
 
     //Objects
-    this.ship;
+    this.player;
     this.laserGroup;
     this.invaderLaserGroup2;  //level 2 LaserGroup
     this.invaderLaserGroup; //basic LaserGropu
@@ -25,7 +26,6 @@ export default class Level2Scene extends Phaser.Scene {
 
     //Game Options
     this.movementSpeed;
-    this.canMove;
     this.canInvaderShoot;
     this.colliderActive;
     this.canPlayerShoot=0
@@ -34,6 +34,8 @@ export default class Level2Scene extends Phaser.Scene {
     this.invaderLaserSound;
     this.invaderDieSound;
     this.laserSound;
+    this.gameOverSound
+    this.nextStageSound
   }
 
   preload() {}
@@ -64,7 +66,6 @@ export default class Level2Scene extends Phaser.Scene {
 
     //Game Options
     this.movementSpeed = 500;
-    this.canMove = 1;
     this.canInvaderShoot = 1;
     this.colliderActive = true;
 
@@ -73,12 +74,11 @@ export default class Level2Scene extends Phaser.Scene {
     this.invaderDieSound = this.sound.add("invaderDieSound");
     this.gameOverSound = this.sound.add("gameOverSound");
     this.invaderLaserSound = this.sound.add("invaderLaserSound");
+    this.nextStageSound=this.sound.add("nextStageSound")
 
-    //Add player ship, input listeners, collide ship with world bounds
-    this.addShip();
+    this.player=new Player(this,this.cameras.main.width / 2,this.cameras.main.height-50)
+    this.player.addCollider()
     this.addEvents();
-    this.ship.setCollideWorldBounds(true);
-
 
     //Invader shoot events
     var timer1 = this.time.addEvent({
@@ -101,55 +101,6 @@ export default class Level2Scene extends Phaser.Scene {
 
     //InvadersGroup-PlayerLaser colliders
     this.addColliders();
-
-    //Player-InvaderLasers Colliders
-    this.physics.add.collider(
-      this.ship,
-      this.invaderLaserGroup2,
-      (ship, laser) => {
-        if (this.colliderActive) {
-          this.colliderActive = false;
-          laser.setActive(false);
-          laser.setVisible(false);
-          this.ship.setTint(0xff0000);
-          this.canMove = 0;
-          this.canInvaderShoot = 0;
-          setTimeout(() => {
-            this.actualWaves=this.initialWaves
-            this.invadersLeft = this.initialInvaders;
-            this.scene.start("MainMenu");
-          }, 1500);
-        }
-      }
-    );
-
-    this.physics.add.collider(
-      this.ship,
-      this.invaderLaserGroup,
-      (ship, laser) => {
-        if (this.colliderActive) {
-          this.colliderActive = false;
-          laser.setActive(false);
-          laser.setVisible(false);
-          this.ship.setTint(0xff0000);
-          this.canMove = 0;
-          this.canInvaderShoot = 0;
-          setTimeout(() => {
-            this.actualWaves=this.initialWaves
-            this.invadersLeft = this.initialInvaders;
-            this.scene.start("MainMenu");
-          }, 1500);
-        }
-      }
-    );
-  }
-
-  
-
-  addShip() {
-    const centerX = this.cameras.main.width / 2;
-    const bottom = this.cameras.main.height;
-    this.ship = this.physics.add.image(centerX, bottom - 50, "ship");
   }
 
   addEvents() {
@@ -212,18 +163,18 @@ export default class Level2Scene extends Phaser.Scene {
     this.inputKeys.forEach((key) => {
       if (Phaser.Input.Keyboard.JustDown(key)) {
         if(this.canPlayerShoot){
-          this.laserGroup.fireBullet(this.ship.x, this.ship.y - 20);
+          this.laserGroup.fireBullet(this.player.x, this.player.y - 20);
           this.laserSound.play();
         }
       }
     });
 
     //Move Player Ship
-    if (this.canMove && this.cursors.left.isDown)
-      this.ship.setVelocityX(-this.movementSpeed);
-    else if (this.canMove && this.cursors.right.isDown)
-      this.ship.setVelocityX(this.movementSpeed);
-    else this.ship.setVelocityX(0);
+    if (this.player.canMove && this.cursors.left.isDown)
+      this.player.setVelocityX(-this.movementSpeed);
+    else if (this.player.canMove && this.cursors.right.isDown)
+      this.player.setVelocityX(this.movementSpeed);
+    else this.player.setVelocityX(0);
 
     //Move InvadersGroup2
     if (
@@ -251,21 +202,23 @@ export default class Level2Scene extends Phaser.Scene {
 
     //Win Condition
     if (!this.invadersLeft) {
-      /*this.invadersLeft = this.initialInvaders;
+      this.invadersLeft = this.initialInvaders;
       this.canPlayerShoot=0
       this.laserGroup.getChildren().forEach(child=>{
         child.setActive(false)
         child.setVisible(false)
-        child.body.reset(window.innerWidth+400,-300)*/
-        this.scene.start("MainMenu");
-      //})
+        child.body.reset(window.innerWidth+400,-300)
+      })
       if (this.actualWaves > 0) {
         this.actualWaves--;
         this.createNewWave();
         this.addColliders()
       } else {
-        this.actualWaves=this.initialWaves
-        this.scene.start("MainMenu");
+        this.nextStageSound.play()
+        setTimeout(()=>{
+          this.actualWaves=this.initialWaves
+          this.scene.start("Level3");
+        },3000)
       }
     }
   }

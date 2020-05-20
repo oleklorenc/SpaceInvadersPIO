@@ -23,7 +23,8 @@ export default class MainMenuScene extends Phaser.Scene{
         this.addButton(0,200,'Play Game',this.playButton,"Level1")
         this.addButton(0,0,'Options', this.optionsButton, "Options")
         this.addButton(0,-200,'Credits',this.creditsButton, "Credits")
-        this.addButton(0,100, 'Level4', this.playButton, 'Level4')
+        this.addButton(0,100, 'Level7', this.playButton, 'Level7')
+        
     }
 
     update(){

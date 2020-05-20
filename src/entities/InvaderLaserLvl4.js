@@ -21,7 +21,7 @@ export default class InvaderLaser4 extends Phaser.Physics.Arcade.Sprite {
     this.setActive(true);
     this.setVisible(true);
     this.setVelocityY(1000);
-    //this.setVelocityX(300);
+
     setTimeout(()=> {
       let g = 400;
       this.setVelocityX(-g);
@@ -38,7 +38,6 @@ export default class InvaderLaser4 extends Phaser.Physics.Arcade.Sprite {
     this.setVisible(true);
     this.setVelocityY(1000);
     
-    //this.setVelocityX(-300);
     setTimeout(()=> {
       let g = -400;
       this.setVelocityY(500);

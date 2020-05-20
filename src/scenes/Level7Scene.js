@@ -1,25 +1,27 @@
 import PlayerLaserGroup from "../entities/PlayerLaserGroup";
-import InvaderLaserGroup4 from "../entities/InvaderLaserGroupLvl4";
-import InvaderGroup4 from "../entities/InvaderGroupLvl4";
+import InvaderLaserGroup7 from "../entities/Lvl7/InvaderLaserGroupLvl7";
+import InvaderGroup7 from "../entities/Lvl7/InvaderGroupLvl7";
 import InvaderLaserGroup from "../entities/InvaderLaserGroup";
 import InvaderGroup from "../entities/InvaderGroup";
 import Level1Scene from "./Level1Scene";
+import InvaderLaser7 from "../entities/Lvl7/InvaderLaserLvl7";
 
 export default class Level4Scene extends Phaser.Scene {
   constructor() {
-    super({ key: "Level4" });
+    super({ key: "Level7" });
 
     //Objects
     this.ship;
     this.laserGroup;
-    this.invaderLaserGroup4;  //level 4 LaserGroup
+    this.invaderLaserGroup7;  //level 7 LaserGroup
     this.invaderLaserGroup; //basic LaserGropu
-    this.invadersGroup4;  //level 4 InvaderGroup
+    this.invadersGroup7;  //level 7 InvaderGroup
     this.invadersGroup; //basic InvaderGroup
+    this.invadersExtra; //extra troops
     this.background;
     this.inputKeys;
     this.cursors;
-    this.initialInvaders=13
+    this.initialInvaders=15
     this.invadersLeft = this.initialInvaders;
     this.initialWaves=2
     this.actualWaves = this.initialWaves; // =n actual waves=n+1 zrobione: 1,2
@@ -64,8 +66,8 @@ export default class Level4Scene extends Phaser.Scene {
     //Objects
     this.laserGroup = new PlayerLaserGroup(this, -300, -300);
     this.createNewWave();
-    this.invaderLaserGroup4 = new InvaderLaserGroup4(this,-800,800); //elvis
-    this.invaderLaserGroup = new InvaderLaserGroup(this,-500,500);
+    this.invaderLaserGroup7 = new InvaderLaserGroup7(this,-800,800); //elvis
+    this.invaderLaserGroup = new InvaderLaserGroup7(this,-500,500);
 
     //Game Options
     this.movementSpeed = 400;
@@ -90,16 +92,7 @@ export default class Level4Scene extends Phaser.Scene {
 
     //Invader shoot events
     var timer1 = this.time.addEvent({
-      delay: 1500, // ms
-      callback: () => {
-        this.invadersGroup4.fireInvaderLaser();
-      },
-      args: [this],
-      loop: true,
-    });
-
-    var timer2 = this.time.addEvent({
-      delay: 1500, // ms
+      delay: 2000, // ms
       callback: () => {
         this.invadersGroup.fireInvaderLaser();
       },
@@ -107,13 +100,31 @@ export default class Level4Scene extends Phaser.Scene {
       loop: true,
     });
 
+    var timer2 = this.time.addEvent({
+      delay: 3000, // ms
+      callback: () => {
+        this.invadersGroup7.fireInvaderLaser();
+      },
+      args: [this],
+      loop: true,
+    });
+
+    var timer3 = this.time.addEvent({
+      delay: 1000,
+      callback: () => {
+        this.invadersExtra.fireInvaderLaser();
+      },
+      args: [this],
+      loop: true
+    })
+
     //InvadersGroup-PlayerLaser colliders
     this.addColliders();
 
     //Player-InvaderLasers Colliders
     this.physics.add.collider(
       this.ship,
-      this.invaderLaserGroup4,
+      this.invaderLaserGroup7,
       (ship, laser) => {
         if (this.colliderActive) {
           this.colliderActive = false;
@@ -176,20 +187,24 @@ export default class Level4Scene extends Phaser.Scene {
   }
 
   createNewWave() {
-    this.invadersGroup4 = new InvaderGroup4(this, 0, 0, -200, -200);
-    this.invadersGroup = new InvaderGroup(this, 120, 100, window.innerWidth+200, -200);
+    this.invadersGroup7 = new InvaderGroup7(this, -50, 0, -200, -200);
+    this.invadersGroup = new InvaderGroup7(this, 120, 50, window.innerWidth+100, -200);
+    this.invadersExtra = new InvaderGroup7(this, -100, 150, 200, 400)
 
-    this.invadersGroup4.setInvaders();
-    this.invadersGroup4.setVelocityX(-500);
+    this.invadersGroup7.setInvaders();
+    this.invadersGroup7.setVelocityX(-500);
 
     this.invadersGroup.setInvaders();
-    this.invadersGroup.setVelocityX(200);
+    this.invadersGroup.setVelocityX(500);
+
+    this.invadersExtra.setInvaders();
+    this.invadersExtra.setVelocityX(300);
   }
 
   addColliders() {
     //PlayerLasers-Invaders Collider
     this.physics.add.collider(
-      this.invadersGroup4,
+      this.invadersGroup7,
       this.laserGroup,
       (invader, laser) => {
         this.invaderDieSound.play();
@@ -218,6 +233,22 @@ export default class Level4Scene extends Phaser.Scene {
         this.invadersLeft--;
       }
     );
+
+    this.physics.add.collider(
+      this.invadersExtra,
+      this.laserGroup,
+      (invader, laser) => {
+        this.invaderDieSound.play();
+        invader.setActive(false)
+        invader.disableBody(true,true)
+        //console.log(invader.active)
+        laser.setX(-100) //SET LASERS X AFTER COLLISION- AVOID DOUBLE HIT
+
+        this.score += 10;
+        this.scoreText.setText('Score: '+ this.score);
+        this.invadersLeft--;
+      }
+    )
   }
 
   update(time, delta) {
@@ -248,28 +279,60 @@ export default class Level4Scene extends Phaser.Scene {
       this.ship.setVelocityY(0);
     }
     //Move InvadersGroup4
+    // if (
+    //   this.invadersGroup7.countActive() &&
+    //   this.invadersGroup7.getFirstAlive().x < 0
+    // ){
+    //   var te = -100;
+    //   this.invadersGroup7.setVelocityX(400);
+    //   this.invadersGroup7.setVelocityY(100);
+    //   setTimeout(() => {
+    //     this.invadersGroup7.setVelocityY(-100);
+    //   }, 500)
+    //   setTimeout(() => {
+    //     this.invadersGroup7.setVelocityY(0);
+    //   }, 1000)
+    // }
+    // if (
+    //   this.invadersGroup7.countActive() &&
+    //   this.invadersGroup7.getLast(true).x > window.innerWidth
+    // )
+    // {
+    //   this.invadersGroup7.setVelocityX(-400);
+    //   //this.invadersGroup4.setVelocityY(-100);
+    // }
+
     if (
-      this.invadersGroup4.countActive() &&
-      this.invadersGroup4.getFirstAlive().x < 0
-    ){
-      var te = -100;
-      this.invadersGroup4.setVelocityX(400);
-      this.invadersGroup4.setVelocityY(100);
-      setTimeout(() => {
-        this.invadersGroup4.setVelocityY(-100);
-      }, 500)
-      setTimeout(() => {
-        this.invadersGroup4.setVelocityY(0);
-      }, 1000)
-    }
-    if (
-      this.invadersGroup4.countActive() &&
-      this.invadersGroup4.getLast(true).x > window.innerWidth
+      this.invadersGroup7.countActive() &&
+      this.invadersGroup7.getFirstAlive().x < 0
     )
     {
-      this.invadersGroup4.setVelocityX(-400);
-      //this.invadersGroup4.setVelocityY(-100);
+
+      // let alpha = 100 + Math.floor((300) * Math.random());
+      // if(alpha%2 == 0)
+      // {
+      //   this.invadersGroup7.shiftPosition(alpha, alpha, 0);
+      // }
+      // else {
+      //   let beta = 10 + Math.floor(50 * Math.random());
+      //   this.invadersGroup7.shiftPosition(0, beta, 0);
+      // }
+      //this.invadersGroup7.rotateAroundDistance(1,2,100)
+      this.invadersGroup7.setVelocityX(500);
+      //this.invadersGroup7.shiftPosition(100, 100, 1);
+      this.invadersGroup7.setVelocity(500,19,-34)
     }
+    if (
+      this.invadersGroup7.countActive() &&
+      this.invadersGroup7.getLast(true).x > window.innerWidth
+    )
+    {
+      this.invadersGroup7.setVelocityX(-500);
+      //this.invadersGroup7.setVelocityY(-100);
+      this.invadersGroup7.setVelocity(-500,-19,34)
+    }
+      
+
       
 
     //Move InvadersGroup
@@ -277,12 +340,42 @@ export default class Level4Scene extends Phaser.Scene {
       this.invadersGroup.countActive() &&
       this.invadersGroup.getFirstAlive().x < 0
     )
-      this.invadersGroup.setVelocityX(100);
+    {
+      this.invadersGroup.setVelocityX(500);
+      //this.invadersGroup7.shiftPosition(100, 100, 1);
+      this.invadersGroup.setVelocity(500,50,-34)
+    }
     if (
       this.invadersGroup.countActive() &&
       this.invadersGroup.getLast(true).x > window.innerWidth
     )
-      this.invadersGroup.setVelocityX(-100);
+    {
+      this.invadersGroup.setVelocityX(-500);
+      //this.invadersGroup7.setVelocityY(-100);
+      this.invadersGroup.setVelocity(-500,-50,34)
+    }
+
+
+    if (
+      this.invadersExtra.countActive() &&
+      this.invadersExtra.getFirstAlive().x < 0
+    )
+    {
+      //this.invadersGroup7.shiftPosition(100, 100, 1);
+      this.invadersExtra.setVelocityX(700)
+      this.invadersExtra.setVelocityY(-150)
+    }
+    if (
+      this.invadersExtra.countActive() &&
+      this.invadersExtra.getLast(true).x > window.innerWidth
+    )
+    {
+      //this.invadersGroup7.setVelocityY(-100);  
+      this.invadersExtra.setVelocityX(-700);
+      this.invadersExtra.setVelocityY(150);
+    }
+
+      
 
     //Win Condition
     if (!this.invadersLeft) {
@@ -307,6 +400,4 @@ export default class Level4Scene extends Phaser.Scene {
       }
     }
   }
-
-
 }

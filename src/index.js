@@ -9,6 +9,7 @@ import CreditsScene from "./scenes/CreditsScene.js"
 
 import Model from './scenes/Model.js';
 import Level4Scene from "./scenes/Level4Scene.js";
+import Level7Scene from "./scenes/Level7Scene.js";
 
 const config = {
 	type: Phaser.AUTO,
@@ -21,7 +22,7 @@ const config = {
 			gravity: { y: 0 }
 		}
 	},
-	scene: [BootScene,PreloaderScene,TitleScene,GameScene,Level1Scene,OptionsScene,CreditsScene, Level4Scene]
+	scene: [BootScene,PreloaderScene,TitleScene,GameScene,Level1Scene,OptionsScene,CreditsScene, Level4Scene, Level7Scene]
 };
 
 const game = new Phaser.Game(config);

@@ -10,7 +10,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
   addCollider() {
     //Player-InvaderLasers Collider
-    /*this.scene.physics.add.collider(
+    this.scene.physics.add.collider(
       this,
       this.scene.invaderLaserGroup,
       (ship, laser) => {
@@ -53,6 +53,6 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
           }, 1500);
         }
       }
-    );*/
+    );
   }
 }

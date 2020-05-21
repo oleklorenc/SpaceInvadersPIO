@@ -9,7 +9,8 @@ import Level2Scene from './scenes/Level2Scene.js'
 import Level3Scene from "./scenes/Level3Scene.js";
 import Level4Scene from "./scenes/Level4Scene.js";
 import Level5Scene from "./scenes/Level5Scene.js";
-
+import Level6Scene from "./scenes/Level6Scene.js";
+import ChooseLevelScene from "./scenes/ChooseLevelScene.js";
 import Level7Scene from "./scenes/Level7Scene.js";
 
 import Model from './scenes/Model.js';
@@ -27,7 +28,7 @@ const config = {
 			gravity: { y: 0 }
 		}
 	},
-	scene: [BootScene,PreloaderScene,TitleScene,OptionsScene,CreditsScene,Level1Scene,Level2Scene,Level3Scene,Level4Scene, Level5Scene,Level7Scene]
+	scene: [BootScene,PreloaderScene,TitleScene,OptionsScene,CreditsScene,Level1Scene,Level2Scene,Level3Scene,Level4Scene, Level5Scene, Level6Scene, Level7Scene, ChooseLevelScene]
 };
 
 const game = new Phaser.Game(config);

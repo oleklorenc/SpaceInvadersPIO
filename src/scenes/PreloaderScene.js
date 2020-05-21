@@ -72,6 +72,7 @@ export default class PreloaderScene extends Phaser.Scene {
     this.load.image("ship", "src/assets/sprites/ship.png");
     this.load.image("invader5", "src/assets/sprites/BlueAlien.png");
     this.load.image("shield", "src/assets/sprites/shield.png");
+    this.load.image("invader6", "src/assets/sprites/CreamAlien.png");
     this.load.image("invader7", "src/assets/orangeAlien.png");
 
     //Sounds
@@ -82,6 +83,7 @@ export default class PreloaderScene extends Phaser.Scene {
     this.load.audio("invaderLaserSound", ["src/assets/sounds/invaderLaserSound.mp3"]);
     this.load.audio("nextStageSound", ["src/assets/sounds/nextStageSound.mp3"]);
     this.load.audio("shieldSound", ["src/assets/sounds/shieldSound.mp3"]);
+    this.load.audio("shieldHit", ["src/assets/sounds/Shield_Hit.mp3"]);
 
     // remove progress bar when complete
     this.load.on(

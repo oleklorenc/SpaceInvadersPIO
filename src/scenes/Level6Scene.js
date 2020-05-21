@@ -1,12 +1,13 @@
-import PlayerLaserGroupLevel3 from "../entities/Level3/PlayerLaserGroupLevel3";
+import PlayerLaserGroupLvl6 from "../entities/Level6/PlayerLaserGroupLvl6";
+import InvaderLaserGroupLvl6 from "../entities/Level6/InvaderLaserGroupLvl6";
 import InvaderLaserGroup from "../entities/Level1/InvaderLaserGroup";
 import InvaderGroup from "../entities/Level1/InvaderGroup";
-import InvaderGroupLevel3 from "../entities/Level3/InvaderGroupLevel3";
-import Player from "../entities/Level3/Player";
+import InvaderGroupLvl6 from "../entities/Level6/InvaderGroupLvl6";
+import Player from "../entities/Level6/Player";
 
-export default class Level3Scene extends Phaser.Scene {
+export default class Level6Scene extends Phaser.Scene {
   constructor() {
-    super({ key: "Level3" });
+    super({ key: "Level6" });
 
     //Objects
     this.player;
@@ -57,10 +58,11 @@ export default class Level3Scene extends Phaser.Scene {
       )
       .setScale(2);
     this.levelTextPosition = -260;
-    this.levelText = this.add.text(this.levelTextPosition, this.cameras.main.centerY, 'Level 3', { fontSize: '128px', align: 'center', color: '#00ff00' }).setOrigin(0.5);
+    this.levelText = this.add.text(this.levelTextPosition, this.cameras.main.centerY, 'Level 6', { fontSize: '128px', align: 'center', color: '#00ff00' }).setOrigin(0.5);
     //Objects
-    this.laserGroup = new PlayerLaserGroupLevel3(this, -300, -300, this.initialInvaders*2);
+    this.laserGroup = new PlayerLaserGroupLvl6(this, -300, -300, this.initialInvaders*2);
     this.createNewWave();
+    this.invaderLaserGroup2 = new InvaderLaserGroupLvl6(this,-500,500);
     this.invaderLaserGroup = new InvaderLaserGroup(this,-500,500);
 
     //Game Options
@@ -113,7 +115,7 @@ export default class Level3Scene extends Phaser.Scene {
   }
 
   createNewWave() {
-    this.invadersGroup1 = new InvaderGroupLevel3(this, 0, 0, -200, -200);
+    this.invadersGroup1 = new InvaderGroupLvl6(this, 0, 0, -200, -200);
     this.invadersGroup2 = new InvaderGroup(this, 120, 100, window.innerWidth+200, -200);
 
     this.invadersGroup1.setInvaders();
@@ -138,8 +140,10 @@ export default class Level3Scene extends Phaser.Scene {
             laser.setX(-100) //SET LASERS X AFTER COLLISION- AVOID DOUBLE HIT
             this.invadersLeft--;
         }
-        else
+        else if(invader.invaderhealth==1)
         {
+            laser.setX(-100) //SET LASERS X AFTER COLLISION- AVOID DOUBLE HIT
+
             invader.setVelocityX(250 + this.invadersGroup1VelocityX); //Start wobble
             setTimeout(() => {
                 invader.setVelocityX(-250 + this.invadersGroup1VelocityX);
@@ -150,12 +154,28 @@ export default class Level3Scene extends Phaser.Scene {
             setTimeout(() => {
               invader.setVelocityX(this.invadersGroup1VelocityX); //End wobble
             }, 60);
-            invader.setTint(0xbf1f1f);
+
+            invader.setTint(0xffc175);
+            invader.invaderhealth = 2;
+            setTimeout(() => {
+              invader.clearTint();
+              invader.setTint(0xbf1f1f);
+              invader.invaderhealth = 0;
+            }, 3500);
             invader.setActive(true)
             console.log(invader.active)
             this.invaderHitSOund.play();
             laser.setX(-100) //SET LASERS X AFTER COLLISION- AVOID DOUBLE HIT
-            invader.invaderhealth--;
+
+            invader.setVelocityY(250); //Begin descent
+            setTimeout(() => {
+                invader.setVelocityY(0); //End descent
+            }, 1200);
+          }
+        else
+        {
+          //this.shieldHit.play();
+          laser.setX(-100) //SET LASERS X AFTER COLLISION- AVOID DOUBLE HIT
         }
       }
     );

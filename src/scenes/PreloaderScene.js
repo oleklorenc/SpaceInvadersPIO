@@ -74,6 +74,29 @@ export default class PreloaderScene extends Phaser.Scene {
     this.load.image("shield", "src/assets/sprites/shield.png");
     this.load.image("invader6", "src/assets/sprites/CreamAlien.png");
     this.load.image("invader7", "src/assets/orangeAlien.png");
+    this.load.image("bossInvader", "src/assets/sprites/bossInvader.png")
+    this.load.spritesheet("bossLaser", "src/assets/sprites/bossLaser.png", {frameWidth: 512, frameHeight: 512})
+
+
+    this.load.image('missileFly1', "src/assets/sprites/Explosion/Missile_1_Flying_000.png")
+    this.load.image('missileFly2', "src/assets/sprites/Explosion/Missile_1_Flying_001.png")
+    this.load.image('missileFly3', "src/assets/sprites/Explosion/Missile_1_Flying_002.png")
+    this.load.image('missileFly4', "src/assets/sprites/Explosion/Missile_1_Flying_003.png")
+    this.load.image('missileFly5', "src/assets/sprites/Explosion/Missile_1_Flying_004.png")
+    this.load.image('missileFly6', "src/assets/sprites/Explosion/Missile_1_Flying_005.png")
+    this.load.image('missileFly7', "src/assets/sprites/Explosion/Missile_1_Flying_006.png")
+    this.load.image('missileFly8', "src/assets/sprites/Explosion/Missile_1_Flying_007.png")
+    this.load.image('missileFly9', "src/assets/sprites/Explosion/Missile_1_Flying_008.png")
+
+    this.load.image('missileBoom1', "src/assets/sprites/Explosion/Missile_1_Explosion_000.png")
+    this.load.image('missileBoom2', "src/assets/sprites/Explosion/Missile_1_Explosion_001.png")
+    this.load.image('missileBoom3', "src/assets/sprites/Explosion/Missile_1_Explosion_002.png")
+    this.load.image('missileBoom4', "src/assets/sprites/Explosion/Missile_1_Explosion_003.png")
+    this.load.image('missileBoom5', "src/assets/sprites/Explosion/Missile_1_Explosion_004.png")
+    this.load.image('missileBoom6', "src/assets/sprites/Explosion/Missile_1_Explosion_005.png")
+    this.load.image('missileBoom7', "src/assets/sprites/Explosion/Missile_1_Explosion_006.png")
+    this.load.image('missileBoom8', "src/assets/sprites/Explosion/Missile_1_Explosion_007.png")
+    this.load.image('missileBoom9', "src/assets/sprites/Explosion/Missile_1_Explosion_008.png")
 
     //Sounds
     this.load.audio("laserSound", ["src/assets/sounds/laser_sound.mp3"]);

@@ -5,6 +5,7 @@ import InvaderLaserGroup from "../entities/InvaderLaserGroup";
 import InvaderGroup from "../entities/InvaderGroup";
 import Level1Scene from "./Level1Scene";
 import InvaderLaser7 from "../entities/Level7/InvaderLaserLvl7";
+import StartText from "../entities/StartText"
 
 export default class Level4Scene extends Phaser.Scene {
   constructor() {
@@ -61,7 +62,7 @@ export default class Level4Scene extends Phaser.Scene {
       )
       .setScale(2);
 
-      //this.scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#fff' });
+    this.startText=new StartText(this,-300,window.innerHeight/2,"Level 7")
 
     //Objects
     this.laserGroup = new PlayerLaserGroup(this, -300, -300);
@@ -255,6 +256,11 @@ export default class Level4Scene extends Phaser.Scene {
   }
 
   update(time, delta) {
+
+    //Move start text
+    this.startText.x+=10
+    if(this.startText.x>window.innerWidth+500)
+      this.startText.destroy()
     //Scroll Background
     this.background.tilePositionY -= 1.5;
 

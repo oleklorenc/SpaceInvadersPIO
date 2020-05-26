@@ -3,6 +3,7 @@ import InvaderLaserGroup from "../entities/Level1/InvaderLaserGroup";
 import InvaderGroup from "../entities/Level1/InvaderGroup";
 import InvaderGroupLevel3 from "../entities/Level3/InvaderGroupLevel3";
 import Player from "../entities/Level3/Player";
+import StartText from "../entities/StartText"
 
 export default class Level3Scene extends Phaser.Scene {
   constructor() {
@@ -56,8 +57,9 @@ export default class Level3Scene extends Phaser.Scene {
         "scrollBackground"
       )
       .setScale(2);
-    this.levelTextPosition = -260;
-    this.levelText = this.add.text(this.levelTextPosition, this.cameras.main.centerY, 'Level 3', { fontSize: '128px', align: 'center', color: '#00ff00' }).setOrigin(0.5);
+
+    this.startText=new StartText(this,-300,window.innerHeight/2,"Level 3")
+
     //Objects
     this.laserGroup = new PlayerLaserGroupLevel3(this, -300, -300, this.initialInvaders*2);
     this.createNewWave();
@@ -175,14 +177,10 @@ export default class Level3Scene extends Phaser.Scene {
 
   update(time, delta) {
 
-    if(this.levelTextPosition != this.cameras.main.centerX) //Update levelText
-      this.levelText.setX(this.levelTextPosition += 10);
-    else
-    {
-      setTimeout(() => {
-        this.levelText.setX(this.levelTextPosition += 10);
-      }, 500);
-    }
+    //Move start text
+    this.startText.x+=10
+    if(this.startText.x>window.innerWidth+500)
+      this.startText.destroy()
 
     //Scroll Background
     this.background.tilePositionY -= 1.5;

@@ -9,7 +9,7 @@ export default class InvaderGroup4 extends Phaser.Physics.Arcade.Group {
       super(scene.physics.world, scene);
   
       this.createMultiple({
-        frameQuantity: 5,
+        frameQuantity: 8,
         key: "invader",
         active: false,
         visible: false,
@@ -22,7 +22,7 @@ export default class InvaderGroup4 extends Phaser.Physics.Arcade.Group {
     }
   
     setInvaders() {
-      for (let i = 0; i < 5; i++) {
+      for (let i = 0; i < 8; i++) {
         let invader = this.getFirstDead(false);
         invader.setActive(true)
         invader.setVisible(true)

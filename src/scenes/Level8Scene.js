@@ -4,6 +4,7 @@ import Bomb from "../entities/Level8/Bomb";
 import Player from "../entities/Level8/Player";
 import BossInvader from "../entities/Level8/BossInvader"
 import PlayerLaser from "../entities/Level8/PlayerLaser";
+import StartText from "../entities/StartText"
 
 export default class Level1Scene extends Phaser.Scene {
   constructor() {
@@ -70,6 +71,9 @@ export default class Level1Scene extends Phaser.Scene {
         "scrollBackground"
       )
       .setScale(2);
+    
+    this.startText=new StartText(this,-300,window.innerHeight/2,"Final Boss")
+
       
     this.bossInvader=new BossInvader(this, window.innerWidth/2,100, "bossInvader");
     
@@ -343,6 +347,12 @@ export default class Level1Scene extends Phaser.Scene {
   }
 
   update(time, delta) {
+
+    //Move start text
+    this.startText.x+=10
+    if(this.startText.x>window.innerWidth+500)
+      this.startText.destroy()
+
     //Scroll Background
     this.background.tilePositionY -= 1.5;
     if(this.player.x<0) this.player.x=0

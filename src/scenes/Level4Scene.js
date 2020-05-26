@@ -4,6 +4,7 @@ import InvaderGroup4 from "../entities/Level4/InvaderGroupLvl4";
 import InvaderLaserGroup from "../entities/Level1/InvaderLaserGroup";
 import InvaderGroup from "../entities/Level1/InvaderGroup";
 import Player from "../entities/Level4/Player"
+import StartText from "../entities/StartText"
 
 export default class Level4Scene extends Phaser.Scene {
   constructor() {
@@ -55,7 +56,8 @@ export default class Level4Scene extends Phaser.Scene {
         "scrollBackground"
       )
       .setScale(2);
-
+    
+    this.startText=new StartText(this,-300,window.innerHeight/2,"Level 4")
 
     //Objects
     this.laserGroup = new PlayerLaserGroup(this, -300, -300);
@@ -152,6 +154,12 @@ export default class Level4Scene extends Phaser.Scene {
   }
 
   update(time, delta) {
+
+    //Move start text
+    this.startText.x+=10
+    if(this.startText.x>window.innerWidth+500)
+      this.startText.destroy()
+      
     //Scroll Background
     this.background.tilePositionY -= 1.5;
 

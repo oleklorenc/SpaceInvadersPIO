@@ -20,7 +20,7 @@ export default class Level4Scene extends Phaser.Scene {
     this.background;
     this.inputKeys;
     this.cursors;
-    this.initialInvaders=13
+    this.initialInvaders=16
     this.invadersLeft = this.initialInvaders;
     this.initialWaves=2
     this.actualWaves = this.initialWaves; // =n actual waves=n+1 zrobione: 1,2
@@ -223,7 +223,7 @@ export default class Level4Scene extends Phaser.Scene {
         this.nextStageSound.play()
         setTimeout(()=>{
           this.actualWaves=this.initialWaves
-          this.scene.start("MainMenu");
+          this.scene.start("5");
         },3000)
       }
     }

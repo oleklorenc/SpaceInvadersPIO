@@ -16,6 +16,7 @@ import Level8Scene from "./scenes/Level8Scene.js";
 import ChooseLevelScene from "./scenes/ChooseLevelScene.js";
 import Model from './scenes/Model.js';
 
+import RexUIPlugin from 'phaser3-rex-plugins/templates/ui/ui-plugin.js';
 
 
 const config = {
@@ -29,6 +30,15 @@ const config = {
 			gravity: { y: 0 }
 		}
 	},
+	plugins: {
+        scene: [{
+            key: 'rexUI',
+            plugin: RexUIPlugin,
+            mapping: 'rexUI'
+        },
+        // ...
+        ]
+    },
 	scene: [BootScene,PreloaderScene,TitleScene,OptionsScene,CreditsScene,Level1Scene,Level2Scene,Level3Scene,Level4Scene, Level5Scene, Level6Scene, Level7Scene, Level8Scene, ChooseLevelScene]
 };
 

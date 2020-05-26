@@ -405,7 +405,7 @@ export default class Level4Scene extends Phaser.Scene {
       } else {
         //this.stageMusic.stop();
         this.actualWaves=this.initialWaves
-        this.scene.start("MainMenu");
+        this.scene.start("Level8");
       }
     }
   }

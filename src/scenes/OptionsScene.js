@@ -14,11 +14,13 @@ export default class OptionsScene extends Phaser.Scene{
     }
 
     preload(){
-        this.load.image('background', 'src/assets/MainMenuBackground.png');
-        this.load.scenePlugin('rexuiplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexuiplugin.min.js', 'rexUI', 'rexUI');
+        //this.load.scenePlugin('rexuiplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexuiplugin.min.js', 'rexUI', 'rexUI');
     }
 
     create(){
+
+        var model=this.sys.game.globals.model
+
         this.add.image(0,0,'background').setScale(2.5)
         this.add.text(window.innerWidth/2, 150, 'Options', { fontFamily: 'Freckle Face', fontSize: 60, color: '#ffffff' })
         .setShadow(2, 2, "#333333", 2, false, true)
@@ -26,10 +28,11 @@ export default class OptionsScene extends Phaser.Scene{
         this.addButton(0,-400,'Back',this.backButton, 'MainMenu')
         
         
+
         this.add.text(window.innerWidth/2, 350, 'Difficulty', { fontFamily: 'Freckle Face', fontSize: 40, color: '#ffffff' })
         .setShadow(2, 2, "#333333", 2, false, true)
         .setOrigin(0.5,0.5);
-        this.rexUI.add.slider({
+        this.diffSlider=this.rexUI.add.slider({
             x: window.innerWidth/2,
             y: 450,
             width: 350,
@@ -41,6 +44,9 @@ export default class OptionsScene extends Phaser.Scene{
             thumb: this.rexUI.add.roundRectangle(0, 0, 0, 0, 10, COLOR_LIGHT),
 
             valuechangeCallback: function (value) {
+                if(value!=0){
+                    model.diff=value
+                }
             },
             space: {
                 top: 4,
@@ -49,12 +55,13 @@ export default class OptionsScene extends Phaser.Scene{
             input: 'drag', // 'drag'|'click'
         })
             .layout();
-
+        
+        this.diffSlider.value=this.sys.game.globals.model.diff
             
             this.add.text(window.innerWidth/2, 550, 'Volume', { fontFamily: 'Freckle Face', fontSize: 40, color: '#ffffff' })
             .setShadow(2, 2, "#333333", 2, false, true)
             .setOrigin(0.5,0.5);
-            this.rexUI.add.slider({
+            this.volumeSlider=this.rexUI.add.slider({
                 x: window.innerWidth/2,
                 y: 650,
                 width: 350,
@@ -66,6 +73,9 @@ export default class OptionsScene extends Phaser.Scene{
                 thumb: this.rexUI.add.roundRectangle(0, 0, 0, 0, 10, COLOR_LIGHT),
     
                 valuechangeCallback: function (value) {
+                    if(value!=0){
+                        model.vol=value
+                    }
                 },
                 space: {
                     top: 4,
@@ -74,6 +84,9 @@ export default class OptionsScene extends Phaser.Scene{
                 input: 'drag', // 'drag'|'click'
             })
                 .layout();
+        
+            this.volumeSlider.value=this.sys.game.globals.model.vol
+
 
     }
 

@@ -77,6 +77,8 @@ export default class PreloaderScene extends Phaser.Scene {
     this.load.image("bossInvader", "src/assets/sprites/bossInvader.png")
     this.load.spritesheet("bossLaser", "src/assets/sprites/bossLaser.png", {frameWidth: 512, frameHeight: 512})
 
+    this.load.script('webfont', 'https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js');
+
 
     this.load.image('missileFly1', "src/assets/sprites/Explosion/Missile_1_Flying_000.png")
     this.load.image('missileFly2', "src/assets/sprites/Explosion/Missile_1_Flying_001.png")

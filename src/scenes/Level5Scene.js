@@ -251,7 +251,7 @@ export default class Level5Scene extends Phaser.Scene {
         this.nextStageSound.play()
         setTimeout(()=>{
           this.actualWaves=this.initialWaves
-          this.scene.start("Level7");
+          this.scene.start("Level6");
         },3000)
       }
     }

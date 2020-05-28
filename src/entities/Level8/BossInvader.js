@@ -9,7 +9,16 @@ export default class BossInvader extends Phaser.Physics.Matter.Sprite {
     this.isShieldOn=true
     this.setSensor(true)
 
-		scene.add.existing(this)
+    scene.add.existing(this)
+    
+/*
+    this.anim=this.scene.anims.create({
+      key: 'bossExplosion',
+      frames: this.scene.anims.generateFrameNames('bossExplosion', {start: 2, end:10}),
+      frameRate: 10,
+      repeat: 3,
+    })*/
+    //this.play('bossExplosion').setScale(3)
   }
   
 

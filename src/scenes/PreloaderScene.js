@@ -66,7 +66,7 @@ export default class PreloaderScene extends Phaser.Scene {
     this.load.image("laser", "src/assets/sprites/playerLaser.png");
     this.load.image("invaderLaser", "src/assets/sprites/invaderLaser.png");
     this.load.image("invader", "src/assets/sprites/GreenAlien.png");
-    this.load.image("invader2", "src/assets/sprites/RedAlien.png");
+    this.load.image("invader2", "src/assets/sprites/RedAlienik.png");
     this.load.image("invaderLevel3", "src/assets/sprites/PinkAlien.png");
     this.load.image("invader4", "src/assets/sprites/YellowAlien.png");
     this.load.image("ship", "src/assets/sprites/ship.png");
@@ -76,6 +76,7 @@ export default class PreloaderScene extends Phaser.Scene {
     this.load.image("invader7", "src/assets/orangeAlien.png");
     this.load.image("bossInvader", "src/assets/sprites/bossInvader.png")
     this.load.spritesheet("bossLaser", "src/assets/sprites/bossLaser.png", {frameWidth: 512, frameHeight: 512})
+    this.load.spritesheet("bossExplosion", "src/assets/sprites/bossExplosion.png", {frameWidth: 96, frameHeight: 96})
 
     this.load.script('webfont', 'https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js');
 
@@ -113,6 +114,8 @@ export default class PreloaderScene extends Phaser.Scene {
     this.load.audio("bossBeam", ["src/assets/sounds/bossBeam.mp3"]);
     this.load.audio("levelMusic", ["src/assets/sounds/levelMusic.mp3"]);
     this.load.audio("levelMusic2", ["src/assets/sounds/levelMusic2.mp3"]);
+    this.load.audio("victorySound", ["src/assets/sounds/victorySound.mp3"]);
+    this.load.audio("bossBoom", ["src/assets/sounds/bossBoom.mp3"]);
 
     // remove progress bar when complete
     this.load.on(

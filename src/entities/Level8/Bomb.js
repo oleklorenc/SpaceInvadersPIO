@@ -53,9 +53,10 @@ export default class Bomb extends Phaser.Physics.Matter.Sprite {
 
       this.on('animationcomplete', function (anim, frame) {
         if(anim.key=='fly'){
-          this.explosionSound.play({
-            volume: this.scene.sys.game.globals.model.sound,
-          })
+          if(!this.scene.isGameOver && !this.scene.playerWon)
+            this.explosionSound.play({
+              volume: this.scene.sys.game.globals.model.sound,
+            })
           this.setCircle(100)
           this.setSensor(true)
         }else if(anim.key=='explosion'){

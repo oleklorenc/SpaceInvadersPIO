@@ -89,14 +89,16 @@ export default class Level1Scene extends Phaser.Scene {
     this.canMove = 1;
     this.canInvaderShoot = 1;
     this.colliderActive = true;
+    this.playerWon=false
 
     //Sounds
     this.laserSound = this.sound.add("laserSound");
     this.invaderDieSound = this.sound.add("invaderDieSound");
     this.gameOverSound = this.sound.add("gameOverSound");
     this.invaderLaserSound = this.sound.add("invaderLaserSound");
-    this.nextStageSound=this.sound.add("nextStageSound")
+    this.nextStageSound=this.sound.add("victorySound")
     this.bossBeamSound = this.sound.add("bossBeam");
+    this.bossBoomSound = this.sound.add("bossBoom");
     this.levelMusic=this.sound.add("levelMusic")
     this.levelMusic.play({
       volume: this.sys.game.globals.model.vol,
@@ -122,6 +124,13 @@ export default class Level1Scene extends Phaser.Scene {
       frameRate: 10,
       repeat: -1
     });
+
+    this.anims.create({
+      key: 'bossExplosion',
+      frames: this.anims.generateFrameNames('bossExplosion', {start: 2, end:10}),
+      frameRate: 10,
+      repeat: 3,
+    })
     //this.x.play('left')//.setScaleX(0.5,2)*/
     //this.x.play('left', this.x)*/
 
@@ -133,34 +142,36 @@ export default class Level1Scene extends Phaser.Scene {
       delay: 8000, // ms
       callback: () => {
         //var ile=Phaser.Math.Between(1,4);
-        var x=this.bossInvader.x
-        var y=this.bossInvader.y;
-        var x1=window.innerWidth/3
-        var x2=0
-        for(let i=0;i<3;i++) {
+        if(!this.playerWon){
+          var x=this.bossInvader.x
+          var y=this.bossInvader.y;
+          var x1=window.innerWidth/3
+          var x2=0
+          for(let i=0;i<3;i++) {
 
-          var xb=this.bossInvader.x;
-          var yb=this.bossInvader.y+100;
-          var xp=Phaser.Math.Between(x2,x1)
-          var yp=this.player.y
-          this.bombs[i].destroy();
-          this.bombs[i]=new Bomb(this,x,y, "missileFly1").setScale(0.25);
-          //this.matter.moveTo(this.bombs[i], xp, yp, 500)
-          
-          this.tweens.add({
-            targets: this.bombs[i],
-            x: xp,
-            y: yp,
-            duration: Phaser.Math.Between(1000,3000),
-            onComplete: ()=>{
-                this.bombs[i].anims.stop()
-                this.bombs[i].play('explosion').setScale(0.25)
-            },
-            //completeDelay: 3000
-          });
-          this.bombs[i].setRotation(Math.PI + Math.atan((xb-xp)/(yp-yb)))
-          x1+=window.innerWidth/3
-          x2+=window.innerWidth/3
+            var xb=this.bossInvader.x;
+            var yb=this.bossInvader.y+100;
+            var xp=Phaser.Math.Between(x2,x1)
+            var yp=this.player.y
+            this.bombs[i].destroy();
+            this.bombs[i]=new Bomb(this,x,y, "missileFly1").setScale(0.25);
+            //this.matter.moveTo(this.bombs[i], xp, yp, 500)
+            
+            this.tweens.add({
+              targets: this.bombs[i],
+              x: xp,
+              y: yp,
+              duration: Phaser.Math.Between(1000,3000),
+              onComplete: ()=>{
+                  this.bombs[i].anims.stop()
+                  this.bombs[i].play('explosion').setScale(0.25)
+              },
+              //completeDelay: 3000
+            });
+            this.bombs[i].setRotation(Math.PI + Math.atan((xb-xp)/(yp-yb)))
+            x1+=window.innerWidth/3
+            x2+=window.innerWidth/3
+          }
         }
       },
       args: [this],
@@ -225,13 +236,60 @@ export default class Level1Scene extends Phaser.Scene {
             this.healthBar.fillStyle(0x8FEB21, 0.8);
             this.healthBar.fillRect(100, 10, this.bossInvader.lives*16, 14);
               if(this.bossInvader.lives<=0){
-              this.nextStageSound.play({
+              
+              this.levelMusic.stop()
+              this.winText=new StartText(this,window.innerWidth/2,window.innerHeight/2,"Congratulations! You Win")
+              this.playerWon=true
+              this.bossInvader.setActive(false)
+              this.bossInvader.setVisible(false)
+              this.player.canMove=false
+
+              //TRICK BO COS SIE BUGOWALO KIEDY PUSZCZALEM ANIMACJE NA GLOWNYM BOSSINVADERZE
+              this.boss1=new BossInvader(this,this.bossInvader.x,this.bossInvader.y)
+              this.boss1.play('bossExplosion').setScale(3)
+
+              //MULTIPLE BOOM SOUNDS TRICK
+              this.bossBoomSound.play({
                 volume: this.sys.game.globals.model.sound,
               })
-              this.levelMusic.stop()
+              setTimeout(()=>{
+                setTimeout(()=>{
+                  setTimeout(()=>{
+                    this.bossBoomSound.play({
+                      volume: this.sys.game.globals.model.sound,
+                    })
+                  },1000)
+                  this.bossBoomSound.play({
+                    volume: this.sys.game.globals.model.sound,
+                  })
+                },1000)
+                this.bossBoomSound.play({
+                  volume: this.sys.game.globals.model.sound,
+                })
+              },1000)
+
+              this.tweens.add({
+              targets: this.player,
+              x: window.innerWidth/2,
+              y: window.innerHeight/2+100,
+              duration: 2000,
+              onComplete: ()=>{
+                  this.tweens.add({
+                    targets: this.player,
+                    x: this.player.x,
+                    y:-100,
+                    duration: 1000,
+                  })
+                  this.nextStageSound.play({
+                    volume: this.sys.game.globals.model.sound,
+                  })
+              },
+              completeDelay: 2000
+              });
+
               setTimeout(()=>{
                 this.scene.start("MainMenu")
-              },3000)
+              },14000)
             }
           }
 
@@ -256,7 +314,7 @@ export default class Level1Scene extends Phaser.Scene {
         }
 
         if(playerBombCollision){
-          if(!this.isGameOver)
+          if(!this.isGameOver && !this.playerWon)
           {
             this.gameOverSound.play({
               volume: this.sys.game.globals.model.sound,
@@ -275,7 +333,7 @@ export default class Level1Scene extends Phaser.Scene {
         
 
         if(playerLaserCollision){
-          if(!this.isGameOver){
+          if(!this.isGameOver && !this.playerWon){
             this.gameOverSound.play({
               volume: this.sys.game.globals.model.sound,
             })
@@ -299,7 +357,7 @@ export default class Level1Scene extends Phaser.Scene {
 
         if(bossLaserPlayerCollision){
           
-          if(!this.isGameOver){
+          if(!this.isGameOver && !this.playerWon){
             this.gameOverSound.play({
               volume: this.sys.game.globals.model.sound,
             })
@@ -332,6 +390,7 @@ export default class Level1Scene extends Phaser.Scene {
         duration: 3000,
         ease: 'Power2',
         onComplete: ()=>{
+          if(!this.playerWon)
             this.playSecondTween()
         },
         //completeDelay: 3000
@@ -368,7 +427,8 @@ export default class Level1Scene extends Phaser.Scene {
             this.bossLaser.setVisible(false)
             //this.bossLaser.setActive(false)
             this.bossLaser.setPosition(2000)
-            this.playFirstTween()
+            if(!this.playerWon)
+              this.playFirstTween()
         },
         //completeDelay: 3000
     });

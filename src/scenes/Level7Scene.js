@@ -80,11 +80,13 @@ export default class Level4Scene extends Phaser.Scene {
     this.laserSound = this.sound.add("laserSound");
     this.invaderDieSound = this.sound.add("invaderDieSound");
     this.invaderLaserSound = this.sound.add("invaderLaserSound");
-    //this.lostSound = this.sound.add("lost");
-    this.nextStage = this.sound.add("nextStage");
+    this.nextStageSound = this.sound.add("nextStageSound");
     this.gameOverSound = this.sound.add("gameOverSound");
-    //this.stageMusic = this.sound.add("stage4");
-    //this.stageMusic.play();
+    this.levelMusic=this.sound.add("levelMusic")
+    this.levelMusic.play({
+      volume: this.sys.game.globals.model.vol,
+      loop: true,
+    })
 
     //Add player ship, input listeners, collide ship with world bounds
     this.addShip();
@@ -136,8 +138,10 @@ export default class Level4Scene extends Phaser.Scene {
           this.canMove = 0;
           this.canInvaderShoot = 0;
           //this.stageMusic.stop();
-          //this.lostSound.play();
-          this.gameOverSound.play()
+          this.levelMusic.stop()
+          this.gameOverSound.play({
+            volume: this.sys.game.globals.model.sound,
+          })
           setTimeout(() => {
             this.score = 0;
             this.actualWaves=this.initialWaves
@@ -160,8 +164,10 @@ export default class Level4Scene extends Phaser.Scene {
           this.canMove = 0;
           this.canInvaderShoot = 0;
           //this.stageMusic.stop();
-          //this.lostSound.play();
-          this.gameOverSound.play()
+          this.levelMusic.stop()
+          this.gameOverSound.play({
+            volume: this.sys.game.globals.model.sound,
+          })
           setTimeout(() => {
             this.score = 0;
             this.actualWaves=this.initialWaves
@@ -211,7 +217,9 @@ export default class Level4Scene extends Phaser.Scene {
       this.invadersGroup7,
       this.laserGroup,
       (invader, laser) => {
-        this.invaderDieSound.play();
+        this.invaderDieSound.play({
+          volume: this.sys.game.globals.model.sound,
+        });
         invader.setActive(false)
         console.log(invader.active)
         invader.disableBody(true,true)
@@ -226,7 +234,9 @@ export default class Level4Scene extends Phaser.Scene {
       this.invadersGroup,
       this.laserGroup,
       (invader, laser) => {
-        this.invaderDieSound.play();
+        this.invaderDieSound.play({
+          volume: this.sys.game.globals.model.sound,
+        });
         invader.setActive(false)
         invader.disableBody(true,true)
         console.log(invader.active)
@@ -242,7 +252,9 @@ export default class Level4Scene extends Phaser.Scene {
       this.invadersExtra,
       this.laserGroup,
       (invader, laser) => {
-        this.invaderDieSound.play();
+        this.invaderDieSound.play({
+          volume: this.sys.game.globals.model.sound,
+        });
         invader.setActive(false)
         invader.disableBody(true,true)
         //console.log(invader.active)
@@ -269,7 +281,9 @@ export default class Level4Scene extends Phaser.Scene {
       if (Phaser.Input.Keyboard.JustDown(key)) {
         if(this.canPlayerShoot){
           this.laserGroup.fireBullet(this.ship.x, this.ship.y - 20);
-          this.laserSound.play();
+          this.laserSound.play({
+            volume: this.sys.game.globals.model.sound,
+          });
         }
       }
     });
@@ -279,13 +293,8 @@ export default class Level4Scene extends Phaser.Scene {
       this.ship.setVelocityX(-this.movementSpeed);
     else if (this.canMove && this.cursors.right.isDown)
       this.ship.setVelocityX(this.movementSpeed);
-    else if (this.canMove && this.cursors.up.isDown)
-      this.ship.setVelocityY(-this.movementSpeed)
-    else if (this.canMove && this.cursors.down.isDown)
-      this.ship.setVelocityY(this.movementSpeed)
     else {
       this.ship.setVelocityX(0);
-      this.ship.setVelocityY(0);
     }
     //Move InvadersGroup4
     // if (
@@ -403,9 +412,14 @@ export default class Level4Scene extends Phaser.Scene {
         this.createNewWave();
         this.addColliders()
       } else {
-        //this.stageMusic.stop();
-        this.actualWaves=this.initialWaves
-        this.scene.start("Level8");
+        this.nextStageSound.play({
+          volume: this.sys.game.globals.model.sound,
+        })
+        this.levelMusic.stop()
+        setTimeout(()=>{
+          this.actualWaves=this.initialWaves
+          this.scene.start("Level8");
+        },3000)
       }
     }
   }

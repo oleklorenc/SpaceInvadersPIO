@@ -44,7 +44,9 @@ export default class InvaderGroupLvl6 extends Phaser.Physics.Arcade.Group {
         var index=Phaser.Math.Between(0,this.getChildren().length-1)
         if(this.getChildren()[index].active){
           this.scene.invaderLaserGroup2.fireBullet(this.getChildren()[index].x,this.getChildren()[index].y+15)
-          this.scene.invaderLaserSound.play()
+          this.scene.invaderLaserSound.play({
+            volume: this.scene.sys.game.globals.model.sound,
+          })
           console.log(this.getChildren()[index].y)
         }
       }

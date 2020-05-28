@@ -22,19 +22,19 @@ export default class OptionsScene extends Phaser.Scene{
         var model=this.sys.game.globals.model
 
         this.add.image(0,0,'background').setScale(2.5)
-        this.add.text(window.innerWidth/2, 150, 'Options', { fontFamily: 'Freckle Face', fontSize: 60, color: '#ffffff' })
+        this.add.text(window.innerWidth/2, 75, 'Options', { fontFamily: 'Freckle Face', fontSize: 60, color: '#ffffff' })
         .setShadow(2, 2, "#333333", 2, false, true)
         .setOrigin(0.5,0.5);
         this.addButton(0,-400,'Back',this.backButton, 'MainMenu')
         
         
 
-        this.add.text(window.innerWidth/2, 350, 'Difficulty', { fontFamily: 'Freckle Face', fontSize: 40, color: '#ffffff' })
+        this.add.text(window.innerWidth/2, 200, 'Difficulty', { fontFamily: 'Freckle Face', fontSize: 40, color: '#ffffff' })
         .setShadow(2, 2, "#333333", 2, false, true)
         .setOrigin(0.5,0.5);
         this.diffSlider=this.rexUI.add.slider({
             x: window.innerWidth/2,
-            y: 450,
+            y: 300,
             width: 350,
             height: 20,
             orientation: 'x',
@@ -57,13 +57,16 @@ export default class OptionsScene extends Phaser.Scene{
             .layout();
         
         this.diffSlider.value=this.sys.game.globals.model.diff
+        this.diffSlider.on('valuechange', function(newValue, prevValue){
+            model.diff=newValue
+        })
             
-            this.add.text(window.innerWidth/2, 550, 'Volume', { fontFamily: 'Freckle Face', fontSize: 40, color: '#ffffff' })
+            this.add.text(window.innerWidth/2, 400, 'Music Volume', { fontFamily: 'Freckle Face', fontSize: 40, color: '#ffffff' })
             .setShadow(2, 2, "#333333", 2, false, true)
             .setOrigin(0.5,0.5);
             this.volumeSlider=this.rexUI.add.slider({
                 x: window.innerWidth/2,
-                y: 650,
+                y: 500,
                 width: 350,
                 height: 20,
                 orientation: 'x',
@@ -72,11 +75,11 @@ export default class OptionsScene extends Phaser.Scene{
                 indicator: this.rexUI.add.roundRectangle(0, 0, 0, 0, 10, COLOR_PRIMARY),
                 thumb: this.rexUI.add.roundRectangle(0, 0, 0, 0, 10, COLOR_LIGHT),
     
-                valuechangeCallback: function (value) {
-                    if(value!=0){
-                        model.vol=value
-                    }
-                },
+               // valuechangeCallback: function (value) {
+               //     if(value!=0){
+                //        model.vol=value
+                 //   }
+                //},
                 space: {
                     top: 4,
                     bottom: 4
@@ -86,7 +89,45 @@ export default class OptionsScene extends Phaser.Scene{
                 .layout();
         
             this.volumeSlider.value=this.sys.game.globals.model.vol
+            this.volumeSlider.on('valuechange', function(newValue, prevValue){
+                model.vol=newValue
+            })
 
+
+
+
+            //SOUNDS
+            this.add.text(window.innerWidth/2, 600, 'Sound Volume', { fontFamily: 'Freckle Face', fontSize: 40, color: '#ffffff' })
+            .setShadow(2, 2, "#333333", 2, false, true)
+            .setOrigin(0.5,0.5);
+            this.soundSlider=this.rexUI.add.slider({
+                x: window.innerWidth/2,
+                y: 700,
+                width: 350,
+                height: 20,
+                orientation: 'x',
+    
+                track: this.rexUI.add.roundRectangle(0, 0, 0, 0, 6, COLOR_DARK),
+                indicator: this.rexUI.add.roundRectangle(0, 0, 0, 0, 10, COLOR_PRIMARY),
+                thumb: this.rexUI.add.roundRectangle(0, 0, 0, 0, 10, COLOR_LIGHT),
+    
+               // valuechangeCallback: function (value) {
+               //     if(value!=0){
+                //        model.vol=value
+                 //   }
+                //},
+                space: {
+                    top: 4,
+                    bottom: 4
+                },
+                input: 'drag', // 'drag'|'click'
+            })
+                .layout();
+        
+            this.soundSlider.value=this.sys.game.globals.model.sound
+            this.soundSlider.on('valuechange', function(newValue, prevValue){
+                model.sound=newValue
+            })
 
     }
 

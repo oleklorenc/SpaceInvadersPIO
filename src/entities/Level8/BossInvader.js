@@ -4,7 +4,7 @@ export default class BossInvader extends Phaser.Physics.Matter.Sprite {
     this.setScale(0.25)
     //this.setImmovable(true)
     this.scene = scene;
-    this.lives=100;
+    this.lives=100
     this.shield=100
     this.isShieldOn=true
     this.setSensor(true)

@@ -76,6 +76,11 @@ export default class Level4Scene extends Phaser.Scene {
     this.invaderLaserSound = this.sound.add("invaderLaserSound");
     this.gameOverSound = this.sound.add("gameOverSound");
     this.nextStageSound=this.sound.add("nextStageSound")
+    this.levelMusic=this.sound.add("levelMusic2")
+    this.levelMusic.play({
+      volume: this.sys.game.globals.model.vol,
+      loop: true,
+    })
 
 
     //Add player ship, input listeners, collide ship with world bounds
@@ -132,7 +137,9 @@ export default class Level4Scene extends Phaser.Scene {
       this.invadersGroup4,
       this.laserGroup,
       (invader, laser) => {
-        this.invaderDieSound.play();
+        this.invaderDieSound.play({
+          volume: this.sys.game.globals.model.sound,
+        });
         invader.setActive(false)
         invader.disableBody(true,true)
         laser.setX(-100) //SET LASERS X AFTER COLLISION- AVOID DOUBLE HIT
@@ -144,7 +151,9 @@ export default class Level4Scene extends Phaser.Scene {
       this.invadersGroup,
       this.laserGroup,
       (invader, laser) => {
-        this.invaderDieSound.play();
+        this.invaderDieSound.play({
+          volume: this.sys.game.globals.model.sound,
+        });
         invader.setActive(false)
         invader.disableBody(true,true)
         laser.setX(-100) //SET LASERS X AFTER COLLISION- AVOID DOUBLE HIT
@@ -168,7 +177,9 @@ export default class Level4Scene extends Phaser.Scene {
       if (Phaser.Input.Keyboard.JustDown(key)) {
         if(this.canPlayerShoot){
           this.laserGroup.fireBullet(this.player.x, this.player.y - 20);
-          this.laserSound.play();
+          this.laserSound.play({
+            volume: this.sys.game.globals.model.sound,
+          });
         }
       }
     });
@@ -220,7 +231,10 @@ export default class Level4Scene extends Phaser.Scene {
         this.createNewWave();
         this.addColliders()
       } else {
-        this.nextStageSound.play()
+        this.nextStageSound.play({
+          volume: this.sys.game.globals.model.sound,
+        })
+        this.levelMusic.stop()
         setTimeout(()=>{
           this.actualWaves=this.initialWaves
           this.scene.start("5");

@@ -11,7 +11,7 @@ export default class Bomb extends Phaser.Physics.Matter.Sprite {
       //this.body.setAngle(90)
       //this.setAngle(180)
       //this.setCollideWorldBounds(true);
-
+      this.explosionSound = this.scene.sound.add("rocketExplosion");
 
 
       this.anim1=this.scene.anims.create({
@@ -53,6 +53,9 @@ export default class Bomb extends Phaser.Physics.Matter.Sprite {
 
       this.on('animationcomplete', function (anim, frame) {
         if(anim.key=='fly'){
+          this.explosionSound.play({
+            volume: this.scene.sys.game.globals.model.sound,
+          })
           this.setCircle(100)
           this.setSensor(true)
         }else if(anim.key=='explosion'){

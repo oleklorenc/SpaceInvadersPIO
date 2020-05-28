@@ -79,6 +79,11 @@ export default class Level5Scene extends Phaser.Scene {
     this.invaderLaserSound = this.sound.add("invaderLaserSound");
     this.nextStageSound=this.sound.add("nextStageSound");
     this.shieldSound = this.sound.add("shieldSound");
+    this.levelMusic=this.sound.add("levelMusic")
+    this.levelMusic.play({
+      volume: this.sys.game.globals.model.vol,
+      loop: true,
+    })
 
     this.player=new Player(this,this.cameras.main.width / 2,this.cameras.main.height-50)
     this.player.addCollider()
@@ -139,7 +144,9 @@ export default class Level5Scene extends Phaser.Scene {
       this.shieldGroup,
       this.laserGroup,
       (shield, laser) => {
-        this.shieldSound.play();
+        this.shieldSound.play({
+          volume: this.sys.game.globals.model.sound,
+        });
         shield.setActive(false)
         console.log(shield.active)
         shield.disableBody(true,true)
@@ -153,7 +160,9 @@ export default class Level5Scene extends Phaser.Scene {
       this.invadersGroup5,
       this.laserGroup,
       (invader, laser) => {
-        this.invaderDieSound.play();
+        this.invaderDieSound.play({
+          volume: this.sys.game.globals.model.sound,
+        });
         invader.setActive(false)
         console.log(invader.active)
         invader.disableBody(true,true)
@@ -167,7 +176,9 @@ export default class Level5Scene extends Phaser.Scene {
       this.invadersGroup,
       this.laserGroup,
       (invader, laser) => {
-        this.invaderDieSound.play();
+        this.invaderDieSound.play({
+          volume: this.sys.game.globals.model.sound,
+        });
         invader.setActive(false)
         invader.disableBody(true,true)
         console.log(invader.active)
@@ -194,7 +205,9 @@ export default class Level5Scene extends Phaser.Scene {
       if (Phaser.Input.Keyboard.JustDown(key)) {
         if(this.canPlayerShoot){
           this.laserGroup.fireBullet(this.player.x, this.player.y - 20);
-          this.laserSound.play();
+          this.laserSound.play({
+            volume: this.sys.game.globals.model.sound,
+          });
         }
       }
     });
@@ -248,7 +261,10 @@ export default class Level5Scene extends Phaser.Scene {
         this.createNewWave();
         this.addColliders()
       } else {
-        this.nextStageSound.play()
+        this.nextStageSound.play({
+          volume: this.sys.game.globals.model.sound,
+        })
+        this.levelMusic.stop()
         setTimeout(()=>{
           this.actualWaves=this.initialWaves
           this.scene.start("Level6");

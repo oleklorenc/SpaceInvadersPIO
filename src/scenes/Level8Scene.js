@@ -79,7 +79,7 @@ export default class Level1Scene extends Phaser.Scene {
     
     this.healthBar = this.add.graphics();
     this.healthBar.fillStyle(0x00ccff, 0.8);
-    this.healthBar.fillRect(100, 10, 100+this.bossInvader.lives*16, 14);
+    this.healthBar.fillRect(100, 10, this.bossInvader.shield*16, 14);
 
     this.playFirstTween()
 
@@ -96,6 +96,12 @@ export default class Level1Scene extends Phaser.Scene {
     this.gameOverSound = this.sound.add("gameOverSound");
     this.invaderLaserSound = this.sound.add("invaderLaserSound");
     this.nextStageSound=this.sound.add("nextStageSound")
+    this.bossBeamSound = this.sound.add("bossBeam");
+    this.levelMusic=this.sound.add("levelMusic")
+    this.levelMusic.play({
+      volume: this.sys.game.globals.model.vol,
+      loop: true,
+    })
 
     //Add player ship, input listeners, collide ship with world bounds
     this.player=new Player(this,this.cameras.main.width / 2,this.cameras.main.height-50, "ship")
@@ -124,7 +130,7 @@ export default class Level1Scene extends Phaser.Scene {
     
 
     var timer1 = this.time.addEvent({
-      delay: 6000, // ms
+      delay: 8000, // ms
       callback: () => {
         //var ile=Phaser.Math.Between(1,4);
         var x=this.bossInvader.x
@@ -155,7 +161,6 @@ export default class Level1Scene extends Phaser.Scene {
           this.bombs[i].setRotation(Math.PI + Math.atan((xb-xp)/(yp-yb)))
           x1+=window.innerWidth/3
           x2+=window.innerWidth/3
-          console.log(x1)
         }
       },
       args: [this],
@@ -201,19 +206,33 @@ export default class Level1Scene extends Phaser.Scene {
         let bossLaserPlayerCollision=(gameObjectA instanceof Player && gameObjectB.name=='bossLaser') || (gameObjectA.name=='bossLaser' && gameObjectB instanceof Player)
 
         if (aisBoss && bisLaser) {
-          gameObjectA.lives--
+          //gameObjectA.lives--
           //console.log(this.bossInvader.lives)
           //gameObjectB.destroy()
 
           this.healthBar.clear()
           if(this.bossInvader.isShieldOn){
-            this.healthBar.fillStyle(0x00ccff, 0.8);
-            this.healthBar.fillRect(100, 10, 100+this.bossInvader.lives*16, 14);
             this.bossInvader.shield--
+            this.healthBar.fillStyle(0x00ccff, 0.8);
+            this.healthBar.fillRect(100, 10, this.bossInvader.shield*16, 14);
+            if(this.bossInvader.shield<=0) {
+              this.bossInvader.isShieldOn=false
+              this.healthBar.fillStyle(0x8FEB21, 0.8);
+              this.healthBar.fillRect(100, 10, this.bossInvader.lives*16, 14);
+            }
           }else{
-            this.healthBar.fillStyle(0x8FEB21, 0.8);
-            this.healthBar.fillRect(100, 10, 100+this.bossInvader.lives*16, 14);
             this.bossInvader.lives--
+            this.healthBar.fillStyle(0x8FEB21, 0.8);
+            this.healthBar.fillRect(100, 10, this.bossInvader.lives*16, 14);
+              if(this.bossInvader.lives<=0){
+              this.nextStageSound.play({
+                volume: this.sys.game.globals.model.sound,
+              })
+              this.levelMusic.stop()
+              setTimeout(()=>{
+                this.scene.start("MainMenu")
+              },3000)
+            }
           }
 
           var xs=this.bossInvader.x
@@ -239,10 +258,14 @@ export default class Level1Scene extends Phaser.Scene {
         if(playerBombCollision){
           if(!this.isGameOver)
           {
-            this.gameOverSound.play()
+            this.gameOverSound.play({
+              volume: this.sys.game.globals.model.sound,
+            })
             this.player.canMove=false
             this.player.setTint(0xff0000);
             this.isGameOver=true
+            this.levelMusic.stop()
+            this.bossBeamSound.stop()
             setTimeout(()=>{
               this.isGameOver=false
               this.scene.start('MainMenu')
@@ -253,7 +276,9 @@ export default class Level1Scene extends Phaser.Scene {
 
         if(playerLaserCollision){
           if(!this.isGameOver){
-            this.gameOverSound.play()
+            this.gameOverSound.play({
+              volume: this.sys.game.globals.model.sound,
+            })
             this.player.setTint(0xff0000);
             this.player.canMove=false
             this.isGameOver=true
@@ -263,6 +288,8 @@ export default class Level1Scene extends Phaser.Scene {
             else{
               gameObjectB.setVisible(false)
             }
+            this.levelMusic.stop()
+            this.bossBeamSound.stop()
             setTimeout(()=>{
               this.isGameOver=false
               this.scene.start('MainMenu')
@@ -271,16 +298,23 @@ export default class Level1Scene extends Phaser.Scene {
         }
 
         if(bossLaserPlayerCollision){
+          
           if(!this.isGameOver){
-            this.gameOverSound.play()
+            this.gameOverSound.play({
+              volume: this.sys.game.globals.model.sound,
+            })
             this.player.setTint(0xff0000);
             this.player.canMove=false
             this.isGameOver=true
+            this.levelMusic.stop()
+            this.bossBeamSound.stop()
+
             setTimeout(()=>{
               this.isGameOver=false
               this.scene.start('MainMenu')
             },3000)
           }
+          
         }
 
       })
@@ -326,6 +360,9 @@ export default class Level1Scene extends Phaser.Scene {
           this.bossLaser.y=this.bossInvader.y+500
           this.bossLaser.setActive(true)
           this.bossLaser.setVisible(true)
+          this.bossBeamSound.play({
+            volume: this.sys.game.globals.model.sound,
+          })
         },
         onComplete: ()=>{
             this.bossLaser.setVisible(false)
@@ -365,7 +402,9 @@ export default class Level1Scene extends Phaser.Scene {
           //this.laserGroup.fireBullet(this.player.x, this.player.y - 20);
           this.bullet=new PlayerLaser(this, this.player.x, this.player.y-50,"laser")
           this.bullet.setVelocityY(-20)
-          this.laserSound.play();
+          this.laserSound.play({
+            volume: this.sys.game.globals.model.sound,
+          });
         }
       }
     });

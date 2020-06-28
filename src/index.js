@@ -32,7 +32,7 @@ const config = {
 	},
 	scene: [BootScene,PreloaderScene,TitleScene,OptionsScene,CreditsScene,Level1Scene,Level2Scene,Level3Scene,Level4Scene, Level5Scene, Level6Scene, Level7Scene, Level8Scene, ChooseLevelScene]
 };
-
+//does github work?
 const game = new Phaser.Game(config);
 
 const model = new Model();

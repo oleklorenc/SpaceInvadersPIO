@@ -1,4 +1,13 @@
 # SpaceInvaders-PIO
-npm install to install dependencies
-npm start to start development mode
-npm run build to build for production
+To install dependencies:
+npm install
+
+To start in development mode:
+npm start
+
+To build for production:
+npm run build
+
+Play at:
+https://spaceinvaders-44a3b.firebaseapp.com/
+

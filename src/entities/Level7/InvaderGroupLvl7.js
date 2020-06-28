@@ -1,0 +1,61 @@
+import Invader7 from "./InvaderLvl7";
+
+export default class InvaderGroup7 extends Phaser.Physics.Arcade.Group {
+    constructor(scene, offsetX, offsetY, startX, startY) {
+      super(scene.physics.world, scene);
+  
+      this.createMultiple({
+        frameQuantity: 5,
+        key: "invader",
+        active: false,
+        visible: false,
+        classType: Invader7,
+        setXY: {x: startX, y: startY}
+      });
+      this.scene=scene
+      this.offsetX=offsetX
+      this.offsetY=offsetY
+    }
+  
+    setInvaders() {
+      for (let i = 0; i < 5; i++) {
+        let invader = this.getFirstDead(false);
+        invader.setActive(true)
+        invader.setVisible(true)
+        invader.setScale(0.08) //?
+        this.scene.tweens.add({
+          targets: invader,
+          x: this.offsetX+200+200*i,
+          y: 100+this.offsetY,
+          duration: 1000,
+          ease: 'Power1',
+          onComplete: ()=>{this.scene.canPlayerShoot=true},
+          //completeDelay: 3000
+      });
+
+        /*
+        invader.x=this.offsetX+200+200*i
+        invader.y=100+this.offsetY
+        invader.setActive(true)
+        invader.setVisible(true)
+        invader.setScale(0.2)
+        */
+      }
+    }
+  
+    fireInvaderLaser(){
+      var maxShooter=Phaser.Math.Between(0,3)
+      for(let i=0;i<maxShooter;i++){
+        var index=Phaser.Math.Between(0,this.getChildren().length-1)
+        if(this.getChildren()[index].active){
+        //setTimeout(()=>{
+          this.scene.invaderLaserGroup7.fireBullet(this.getChildren()[index].x,this.getChildren()[index].y+15)
+          this.scene.invaderLaserSound.play({
+            volume: this.scene.sys.game.globals.model.sound,
+          })
+          console.log(this.getChildren()[index].y);
+        }
+        //},500)
+      }
+    }
+  }
